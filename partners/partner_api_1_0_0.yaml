@@ -1,0 +1,2165 @@
+---
+swagger: "2.0"
+info:
+  description: "Partner API."
+  version: "1"
+  title: "Partner API"
+  termsOfService: ""
+  contact:
+    email: "devops@redeam.io"
+  license:
+    name: "Proprietary"
+    url: "https://channel.develop.redeam.io"
+host: "channel.develop.redeam.io"
+basePath: "/v1"
+tags:
+- name: "Availabilities"
+- name: "Bookings"
+- name: "Holds"
+schemes:
+- "https"
+security:
+- APIKeyHeader: []
+  APISecretHeader: []
+paths:
+  /bookings:
+    post:
+      tags:
+      - "Bookings"
+      summary: "Create a booking"
+      description: "\nCreates a booking.\n"
+      operationId: "createBooking"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "request_post_BookingEnvelope"
+        required: true
+        schema:
+          $ref: "#/definitions/request_post_BookingEnvelope"
+        x-exportParamName: "RequestPostBookingEnvelope"
+      responses:
+        201:
+          description: "Create a booking"
+          schema:
+            $ref: "#/definitions/response_post_BookingEnvelope"
+        202:
+          description: "Create a booking"
+          schema:
+            $ref: "#/definitions/response_post_PendingEnvelope"
+        400:
+          description: "Create a booking"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+        401:
+          description: "Create a booking"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+        409:
+          description: "Create a booking"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+        413:
+          description: "Create a booking"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+        424:
+          description: "Create a booking"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+  /bookings/cancel/{booking_id}:
+    put:
+      tags:
+      - "Bookings"
+      summary: "Cancel a booking"
+      description: "\nCancels a booking.\n"
+      operationId: "cancelBooking"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "booking_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "BookingId"
+      responses:
+        200:
+          description: "Cancel a booking"
+        204:
+          description: "Cancel a booking"
+        400:
+          description: "Cancel a booking"
+          schema:
+            $ref: "#/definitions/response_put_ErrorResponse"
+        401:
+          description: "Cancel a booking"
+          schema:
+            $ref: "#/definitions/response_put_ErrorResponse"
+        404:
+          description: "Cancel a booking"
+          schema:
+            $ref: "#/definitions/response_put_ErrorResponse"
+  /bookings/{booking_id}:
+    get:
+      tags:
+      - "Bookings"
+      summary: "Retrieve a single booking"
+      description: "\nReturns a booking.\n"
+      operationId: "getBooking"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "booking_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "BookingId"
+      responses:
+        200:
+          description: "Retrieve a single booking"
+          schema:
+            $ref: "#/definitions/response_get_BookingEnvelope"
+        401:
+          description: "Retrieve a single booking"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+        404:
+          description: "Retrieve a single booking"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+  /holds:
+    post:
+      tags:
+      - "Holds"
+      summary: "Acquire a hold"
+      description: "\nAcquires a hold.\n"
+      operationId: "createHold"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "request_post_HoldEnvelope"
+        required: true
+        schema:
+          $ref: "#/definitions/request_post_HoldEnvelope"
+        x-exportParamName: "RequestPostHoldEnvelope"
+      responses:
+        201:
+          description: "Acquire a hold"
+          schema:
+            $ref: "#/definitions/response_post_HoldEnvelope"
+        400:
+          description: "Acquire a hold"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+        401:
+          description: "Acquire a hold"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+        409:
+          description: "Acquire a hold"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+        413:
+          description: "Acquire a hold"
+          schema:
+            $ref: "#/definitions/response_post_ErrorResponse"
+  /holds/{hold_id}:
+    get:
+      tags:
+      - "Holds"
+      summary: "Retrieve a hold"
+      description: "\nReturns a hold.\n"
+      operationId: "getHold"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hold_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "HoldId"
+      responses:
+        200:
+          description: "Retrieve a hold"
+          schema:
+            $ref: "#/definitions/response_get_HoldEnvelope"
+        401:
+          description: "Retrieve a hold"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+        404:
+          description: "Retrieve a hold"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+    delete:
+      tags:
+      - "Holds"
+      summary: "Release a hold"
+      description: "\nReleases a hold.\n"
+      operationId: "cancelHold"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hold_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "HoldId"
+      responses:
+        204:
+          description: "Release a hold"
+        401:
+          description: "Release a hold"
+          schema:
+            $ref: "#/definitions/response_delete_ErrorResponse"
+        404:
+          description: "Release a hold"
+          schema:
+            $ref: "#/definitions/response_delete_ErrorResponse"
+  /suppliers/{supplier_id}/products/{product_id}/availabilities:
+    get:
+      tags:
+      - "Availabilities"
+      summary: "Retrieve a list of availabilities"
+      description: "\nReturns a list of availabilities.\n"
+      operationId: "listAvailabilities"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "end"
+        in: "query"
+        required: true
+        type: "string"
+        format: "date-time"
+        x-exportParamName: "End"
+      - name: "supplier_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "SupplierId"
+      - name: "product_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "ProductId"
+      - name: "rate_id"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "RateId"
+      - name: "start"
+        in: "query"
+        required: true
+        type: "string"
+        format: "date-time"
+        x-exportParamName: "Start"
+      responses:
+        200:
+          description: "Retrieve a list of availabilities"
+          schema:
+            $ref: "#/definitions/response_get_AvailabilitiesEnvelope"
+        400:
+          description: "Retrieve a list of availabilities"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+        401:
+          description: "Retrieve a list of availabilities"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+  /suppliers/{supplier_id}/products/{product_id}/availability:
+    get:
+      tags:
+      - "Availabilities"
+      summary: "Retrieve a single availability"
+      description: "\nChecks the availability of a product.\n"
+      operationId: "checkAvailability"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "supplier_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "SupplierId"
+      - name: "product_id"
+        in: "path"
+        required: true
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "ProductId"
+      - name: "rate_id"
+        in: "query"
+        required: false
+        type: "string"
+        format: "uuid"
+        x-exportParamName: "RateId"
+      - name: "at"
+        in: "query"
+        required: true
+        type: "string"
+        format: "date-time"
+        x-exportParamName: "At"
+      - name: "qty"
+        in: "query"
+        required: true
+        type: "integer"
+        format: "int32"
+        x-exportParamName: "Qty"
+      responses:
+        200:
+          description: "Retrieve a single availability"
+          schema:
+            $ref: "#/definitions/response_get_AvailabilityEnvelope"
+        400:
+          description: "Retrieve a single availability"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+        401:
+          description: "Retrieve a single availability"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+        404:
+          description: "Retrieve a single availability"
+          schema:
+            $ref: "#/definitions/response_get_ErrorResponse"
+securityDefinitions:
+  APIKeyHeader:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"
+  APISecretHeader:
+    type: "apiKey"
+    name: "X-API-Secret"
+    in: "header"
+definitions:
+  request_post_BookingEnvelope:
+    type: "object"
+    required:
+    - "booking"
+    properties:
+      booking:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  request_post_HoldEnvelope:
+    type: "object"
+    required:
+    - "hold"
+    properties:
+      hold:
+        $ref: "#/definitions/request_post_HoldEnvelope_hold"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  response_delete_ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        $ref: "#/definitions/response_delete_ErrorResponse_error"
+      meta:
+        $ref: "#/definitions/response_delete_ErrorResponse_meta"
+  response_get_AvailabilitiesEnvelope:
+    type: "object"
+    properties:
+      availabilities:
+        $ref: "#/definitions/response_get_AvailabilitiesEnvelope_availabilities"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  response_get_AvailabilityEnvelope:
+    type: "object"
+    properties:
+      availability:
+        $ref: "#/definitions/response_get_AvailabilityEnvelope_availability"
+      bookable:
+        type: "boolean"
+        description: "A true value means a bookable availability is found"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  response_get_BookingEnvelope:
+    type: "object"
+    properties:
+      booking:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  response_get_ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        $ref: "#/definitions/response_delete_ErrorResponse_error"
+      meta:
+        $ref: "#/definitions/response_delete_ErrorResponse_meta"
+  response_get_HoldEnvelope:
+    type: "object"
+    properties:
+      hold:
+        $ref: "#/definitions/response_get_HoldEnvelope_hold"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  response_post_BookingEnvelope:
+    type: "object"
+    properties:
+      booking:
+        $ref: "#/definitions/response_post_BookingEnvelope_booking"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  response_post_ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        $ref: "#/definitions/response_delete_ErrorResponse_error"
+      meta:
+        $ref: "#/definitions/response_delete_ErrorResponse_meta"
+  response_post_HoldEnvelope:
+    type: "object"
+    properties:
+      hold:
+        $ref: "#/definitions/response_post_HoldEnvelope_hold"
+      meta:
+        $ref: "#/definitions/request_post_BookingEnvelope_meta"
+  response_post_PendingEnvelope:
+    type: "object"
+    properties:
+      meta:
+        $ref: "#/definitions/response_post_PendingEnvelope_meta"
+      queueId:
+        type: "string"
+        format: "uuid"
+        description: "ID for queue endpoints"
+  response_put_ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        $ref: "#/definitions/response_delete_ErrorResponse_error"
+      meta:
+        $ref: "#/definitions/response_delete_ErrorResponse_meta"
+  request_post_BookingEnvelope_booking_customer:
+    required:
+    - "firstName"
+    - "lastName"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+        description: "Email address of the customer"
+      firstName:
+        type: "string"
+        description: "First name of the customer"
+      lastName:
+        type: "string"
+        description: "Last name of the customer"
+      phone:
+        type: "string"
+        format: "phone"
+        description: "Phone number of the customer"
+    description: "Customer for the booking"
+  request_post_BookingEnvelope_booking_rate_times:
+    required:
+    - "close"
+    - "open"
+    properties:
+      close:
+        type: "string"
+        description: "Close time"
+      open:
+        type: "string"
+        description: "Open time"
+  request_post_BookingEnvelope_booking_rate_valid:
+    properties:
+      from:
+        type: "string"
+        format: "date-time"
+        description: "Valid from time"
+      until:
+        type: "string"
+        format: "date-time"
+        description: "Valid until time"
+    description: "Valid time range, if DaysOfWeek is specified"
+  request_post_BookingEnvelope_booking_rate_hours:
+    required:
+    - "times"
+    properties:
+      dates:
+        type: "array"
+        description: "Specific dates to which this rule applies"
+        items:
+          type: "string"
+      daysOfWeek:
+        type: "array"
+        description: "Applicable days of week. 0 is undefined, 1 is Monday, etc"
+        items:
+          type: "integer"
+      times:
+        type: "array"
+        description: "Open/Close times"
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_times"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid"
+  request_post_BookingEnvelope_booking_rate_net:
+    required:
+    - "amount"
+    - "currency"
+    properties:
+      amount:
+        type: "integer"
+        format: "int64"
+        description: "Amount in cents"
+      currency:
+        type: "string"
+        description: "ISO 4217 currency code, e.g.: USD, EUR, CHF"
+        pattern: "^[a-zA-Z]{3}$"
+    description: "Net price"
+  request_post_BookingEnvelope_booking_rate_retail:
+    required:
+    - "amount"
+    - "currency"
+    properties:
+      amount:
+        type: "integer"
+        format: "int64"
+        description: "Amount in cents"
+      currency:
+        type: "string"
+        description: "ISO 4217 currency code, e.g.: USD, EUR, CHF"
+        pattern: "^[a-zA-Z]{3}$"
+    description: "Retail price"
+  request_post_BookingEnvelope_booking_rate_travelerType:
+    required:
+    - "ageBand"
+    - "name"
+    properties:
+      ageBand:
+        type: "string"
+        description: "Age band of the traveler type"
+        enum:
+        - "ADULT"
+        - "ANY"
+        - "CHILD"
+        - "INFANT"
+        - "SENIOR"
+        - "STUDENT"
+        - "UNKNOWN"
+        - "YOUTH"
+      maxAge:
+        type: "integer"
+        format: "int32"
+        description: "Maximum age (inclusive) of the traveler type"
+      minAge:
+        type: "integer"
+        format: "int32"
+        description: "Minimum age (inclusive) of the traveler type"
+      name:
+        type: "string"
+        description: "Name of the traveler type, e.g. Diver, Observer, Adult, Military"
+    description: "Traveler type for the rate price"
+  request_post_BookingEnvelope_booking_rate_prices:
+    required:
+    - "id"
+    - "name"
+    - "net"
+    - "travelerType"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate price"
+      labels:
+        type: "array"
+        description: "Labels (tags)"
+        items:
+          type: "string"
+      name:
+        type: "string"
+        description: "Name of the rate price"
+      net:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_net"
+      retail:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_retail"
+      status:
+        type: "string"
+        description: "Status of the rate price"
+        enum:
+        - "ACTIVE"
+        - "INACTIVE"
+      travelerType:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_travelerType"
+  request_post_BookingEnvelope_booking_rate_valid_1:
+    properties:
+      from:
+        type: "string"
+        format: "date-time"
+        description: "Valid from time"
+      until:
+        type: "string"
+        format: "date-time"
+        description: "Valid until time"
+    description: "Time range when this rate is valid"
+  request_post_BookingEnvelope_booking_rate:
+    required:
+    - "hours"
+    - "maxTravelers"
+    - "minTravelers"
+    - "name"
+    - "prices"
+    - "productId"
+    - "title"
+    - "type"
+    properties:
+      cancelable:
+        type: "boolean"
+        description: "Can a booking made with this rate be cancelled"
+      code:
+        type: "string"
+        description: "Short textual code representing the rate"
+      cutoff:
+        type: "integer"
+        format: "int64"
+        description: "Pre-arrival booking cutoff, in minutes. Must be > 0, if type\
+          \ is Freesale"
+      holdable:
+        type: "boolean"
+        description: "Can a booking made for this rate be held"
+      holdablePeriod:
+        type: "integer"
+        format: "int64"
+        description: "Hold length, in seconds. Must be > 0, if type is Reserved"
+      hours:
+        type: "array"
+        description: "Rules for specifying open hours for this rate"
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_hours"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      maxTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Maximum number of travelers to qualify for this rate"
+      minTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Minimum number of travelers to qualify for this rate. Must be\
+          \ at least 1."
+      name:
+        type: "string"
+        description: "Human-friendly name for the rate"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      prices:
+        type: "array"
+        description: "List of prices for this rate."
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_prices"
+      productId:
+        type: "string"
+        format: "uuid"
+        description: "ID of the owning product"
+      refundable:
+        type: "boolean"
+        description: "Can a booking made with this rate be refunded"
+      title:
+        type: "string"
+        description: "Display name for the rate"
+      type:
+        type: "string"
+        description: "Type of rate"
+        enum:
+        - "FREESALE"
+        - "PASS"
+        - "RESERVED"
+        - "UNKNOWN"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid_1"
+      version:
+        type: "number"
+        format: "int32"
+        description: "Internal version number"
+        readOnly: true
+    description: "Rate selection for the booking item"
+  request_post_BookingEnvelope_booking_traveler:
+    required:
+    - "firstName"
+    - "isLead"
+    - "lastName"
+    - "type"
+    properties:
+      age:
+        type: "integer"
+        format: "int32"
+        description: "Age of the traveler"
+      country:
+        type: "string"
+        description: "Origin country of the traveler, as an ISO 3316-1 alpha-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      email:
+        type: "string"
+        format: "email"
+        description: "Email address of the traveler"
+      firstName:
+        type: "string"
+        description: "First name of the traveler"
+      gender:
+        type: "string"
+        description: "Gender of the traveler"
+        enum:
+        - "MALE"
+        - "FEMALE"
+      isLead:
+        type: "boolean"
+        description: "Indicates lead traveler status"
+      lang:
+        type: "string"
+        description: "Spoken language of the traveler, as an ISO 639-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      lastName:
+        type: "string"
+        description: "Last name of the traveler"
+      phone:
+        type: "string"
+        format: "phone"
+        description: "Phone number of the traveler"
+      type:
+        type: "string"
+        description: "Traveler type"
+        enum:
+        - "ANY"
+        - "INFANT"
+        - "CHILD"
+        - "YOUTH"
+        - "ADULT"
+        - "SENIOR"
+    description: "Traveler for the booking item"
+  request_post_BookingEnvelope_booking_items:
+    required:
+    - "priceId"
+    - "quantity"
+    - "rateId"
+    - "startTime"
+    - "supplierId"
+    - "traveler"
+    properties:
+      availabilityId:
+        type: "string"
+        format: "uuid"
+        description: "ID of availability selection"
+      ext:
+        type: "object"
+        description: "Extended data for the booking item"
+        properties: {}
+      priceId:
+        type: "string"
+        description: "ID of price selection for the booking item. This must match\
+          \ one of the price IDs within the rate that is being used to create this\
+          \ booking"
+      quantity:
+        type: "integer"
+        format: "int32"
+        description: "Quantity of the booking item"
+      rate:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate"
+      rateId:
+        type: "string"
+        format: "uuid"
+        description: "Rate ID for the booking item Rate"
+      startTime:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "string"
+        description: "Status of the booking item"
+        readOnly: true
+        enum:
+        - "CANCELLED"
+        - "DELETED"
+        - "EXPIRED"
+        - "OPEN"
+        - "REDEEMED"
+        - "REFUNDED"
+        - "UNKNOWN"
+      supplierId:
+        type: "string"
+        format: "uuid"
+        description: "ID of supplier offering product"
+      traveler:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_traveler"
+  request_post_BookingEnvelope_booking_barcode:
+    required:
+    - "value"
+    properties:
+      format:
+        type: "string"
+        description: "Format of the barcode"
+        enum:
+        - "CODE128"
+        - "EAN13"
+        - "QR_CODE"
+        - "TEXT"
+        - "UNKNOWN"
+        - "UPCA"
+      value:
+        type: "string"
+        description: "Value of the barcode"
+  request_post_BookingEnvelope_booking_guests:
+    properties:
+      count:
+        type: "integer"
+      typeCode:
+        type: "string"
+      typeName:
+        type: "string"
+  request_post_BookingEnvelope_booking_leadTraveler:
+    required:
+    - "firstName"
+    - "isLead"
+    - "lastName"
+    - "type"
+    properties:
+      age:
+        type: "integer"
+        format: "int32"
+        description: "Age of the traveler"
+      country:
+        type: "string"
+        description: "Origin country of the traveler, as an ISO 3316-1 alpha-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      email:
+        type: "string"
+        format: "email"
+        description: "Email address of the traveler"
+      firstName:
+        type: "string"
+        description: "First name of the traveler"
+      gender:
+        type: "string"
+        description: "Gender of the traveler"
+        enum:
+        - "MALE"
+        - "FEMALE"
+      isLead:
+        type: "boolean"
+        description: "Indicates lead traveler status"
+      lang:
+        type: "string"
+        description: "Spoken language of the traveler, as an ISO 639-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      lastName:
+        type: "string"
+        description: "Last name of the traveler"
+      phone:
+        type: "string"
+        format: "phone"
+        description: "Phone number of the traveler"
+      type:
+        type: "string"
+        description: "Traveler type"
+        enum:
+        - "ANY"
+        - "INFANT"
+        - "CHILD"
+        - "YOUTH"
+        - "ADULT"
+        - "SENIOR"
+  request_post_BookingEnvelope_booking_tickets:
+    properties:
+      barcode:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_barcode"
+      bookingItemId:
+        type: "string"
+      guests:
+        type: "array"
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_guests"
+      leadTraveler:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_leadTraveler"
+      status:
+        type: "integer"
+  request_post_BookingEnvelope_booking:
+    required:
+    - "customer"
+    - "items"
+    properties:
+      channelId:
+        type: "string"
+        format: "uuid"
+        description: "Channel ID requesting the booking"
+      customer:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_customer"
+      ext:
+        type: "object"
+        description: "Extended data for the booking"
+        properties: {}
+      holdExt:
+        type: "object"
+        description: "Extended data for the hold associated with the booking"
+        properties: {}
+      holdId:
+        type: "string"
+        format: "uuid"
+        description: "Optional Hold ID"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the booking. This field can optionally be provided on\
+          \ create. If a valid UUID is provided on create, it will be saved as the\
+          \ object's ID. Otherwise, the object will receive a generated ID."
+      items:
+        type: "array"
+        description: "Items for the booking"
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_items"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      status:
+        type: "string"
+        description: "Status of the booking"
+        readOnly: true
+        enum:
+        - "CANCELLED"
+        - "DELETED"
+        - "FAILED"
+        - "OLCI_PENDING"
+        - "OPEN"
+        - "PENDING"
+        - "UNKNOWN"
+      tickets:
+        type: "array"
+        description: "Tickets for the booking"
+        readOnly: true
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_tickets"
+      version:
+        type: "integer"
+        format: "int32"
+        description: "Internal version number"
+        readOnly: true
+    description: "The booking"
+  request_post_BookingEnvelope_meta:
+    properties:
+      reqId:
+        type: "string"
+        format: "uuid"
+        description: "Request ID"
+    description: "Request meta data"
+  request_post_HoldEnvelope_hold_rate:
+    required:
+    - "hours"
+    - "maxTravelers"
+    - "minTravelers"
+    - "name"
+    - "prices"
+    - "productId"
+    - "title"
+    - "type"
+    properties:
+      cancelable:
+        type: "boolean"
+        description: "Can a booking made with this rate be cancelled"
+      code:
+        type: "string"
+        description: "Short textual code representing the rate"
+      cutoff:
+        type: "integer"
+        format: "int64"
+        description: "Pre-arrival booking cutoff, in minutes. Must be > 0, if type\
+          \ is Freesale"
+      holdable:
+        type: "boolean"
+        description: "Can a booking made for this rate be held"
+      holdablePeriod:
+        type: "integer"
+        format: "int64"
+        description: "Hold length, in seconds. Must be > 0, if type is Reserved"
+      hours:
+        type: "array"
+        description: "Rules for specifying open hours for this rate"
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_hours"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      maxTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Maximum number of travelers to qualify for this rate"
+      minTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Minimum number of travelers to qualify for this rate. Must be\
+          \ at least 1."
+      name:
+        type: "string"
+        description: "Human-friendly name for the rate"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      prices:
+        type: "array"
+        description: "List of prices for this rate."
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_prices"
+      productId:
+        type: "string"
+        format: "uuid"
+        description: "ID of the owning product"
+      refundable:
+        type: "boolean"
+        description: "Can a booking made with this rate be refunded"
+      title:
+        type: "string"
+        description: "Display name for the rate"
+      type:
+        type: "string"
+        description: "Type of rate"
+        enum:
+        - "FREESALE"
+        - "PASS"
+        - "RESERVED"
+        - "UNKNOWN"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid_1"
+      version:
+        type: "number"
+        format: "int32"
+        description: "Internal version number"
+        readOnly: true
+    description: "Rate selection for the Hold item"
+  request_post_HoldEnvelope_hold_items:
+    required:
+    - "at"
+    - "priceId"
+    - "rateId"
+    - "supplierId"
+    - "travelerType"
+    properties:
+      at:
+        type: "string"
+        format: "date-time"
+        description: "Availability time for the Hold item"
+      availabilityId:
+        type: "string"
+        format: "uuid"
+        description: "Availability selection for the Hold item"
+      ext:
+        type: "object"
+        description: "Extended data for the Hold item"
+        properties: {}
+      priceId:
+        type: "string"
+        description: "ID of price selection for the booking item. This must match\
+          \ one of the price IDs within the rate that is being used to create this\
+          \ hold"
+      quantity:
+        type: "integer"
+        format: "int32"
+        description: "Quantity of the Hold item"
+      rate:
+        $ref: "#/definitions/request_post_HoldEnvelope_hold_rate"
+      rateId:
+        type: "string"
+        format: "uuid"
+        description: "Rate ID for the hold item Rate"
+      supplierId:
+        type: "string"
+        format: "uuid"
+        description: "Supplier offering the product"
+      travelerType:
+        type: "string"
+        description: "Traveler type for the Hold item"
+        enum:
+        - "ANY"
+        - "INFANT"
+        - "CHILD"
+        - "YOUTH"
+        - "ADULT"
+        - "SENIOR"
+  request_post_HoldEnvelope_hold:
+    required:
+    - "items"
+    properties:
+      expires:
+        type: "string"
+        format: "date-time"
+        description: "Datetime of hold expiration"
+      ext:
+        type: "object"
+        description: "Extended data for the hold"
+        properties: {}
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the hold. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      items:
+        type: "array"
+        description: "Items in the hold"
+        items:
+          $ref: "#/definitions/request_post_HoldEnvelope_hold_items"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      retrieved:
+        type: "string"
+        format: "date-time"
+        description: "Datetime of retrieval"
+        readOnly: true
+      status:
+        type: "string"
+        description: "Status of the hold"
+        readOnly: true
+        enum:
+        - "ACTIVE"
+        - "EXPIRED"
+        - "FAILED"
+        - "PENDING"
+        - "RELEASED"
+        - "UNKNOWN"
+  response_delete_ErrorResponse_error:
+    properties:
+      code:
+        type: "string"
+        description: "Short textual code representing error"
+        enum:
+        - "BAD_REQUEST"
+        - "CONFLICT"
+        - "ENTITY_TOO_LARGE"
+        - "FAILED_DEPENDENCY"
+        - "FORBIDDEN"
+        - "GONE"
+        - "INTERNAL_SERVER"
+        - "NOT_FOUND"
+        - "UNAUTHORIZED"
+      data:
+        type: "object"
+        description: "Map of error-related data"
+        properties: {}
+      message:
+        type: "string"
+        description: "Human-friendly error description"
+    description: "Error"
+  response_delete_ErrorResponse_meta:
+    properties:
+      reqId:
+        type: "string"
+        format: "uuid"
+        description: "Request ID"
+    description: "Meta"
+  response_get_AvailabilitiesEnvelope_availabilities_byProduct_availability:
+    properties:
+      capacity:
+        type: "integer"
+        format: "int32"
+        description: "Remaining capacity of the availability"
+      end:
+        type: "string"
+        format: "date-time"
+        description: "End of the availability"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the availability"
+      start:
+        type: "string"
+        format: "date-time"
+        description: "Start of the availability"
+  response_get_AvailabilitiesEnvelope_availabilities_byProduct:
+    properties:
+      availability:
+        type: "array"
+        items:
+          $ref: "#/definitions/response_get_AvailabilitiesEnvelope_availabilities_byProduct_availability"
+    description: "List of availabilities"
+  response_get_AvailabilitiesEnvelope_availabilities:
+    properties:
+      byProduct:
+        $ref: "#/definitions/response_get_AvailabilitiesEnvelope_availabilities_byProduct"
+      byRate:
+        type: "object"
+        description: "Availabilities by rate ID"
+        properties: {}
+      expires:
+        type: "string"
+        format: "date-time"
+        description: "Expiration date"
+      productId:
+        type: "string"
+        format: "uuid"
+        description: "Product ID for availabilities"
+      retrieved:
+        type: "string"
+        format: "date-time"
+        description: "etrieval date"
+    description: "The availabilities matching the request"
+  response_get_AvailabilityEnvelope_availability:
+    properties:
+      capacity:
+        type: "integer"
+        format: "int32"
+        description: "Remaining capacity of the availability"
+      end:
+        type: "string"
+        format: "date-time"
+        description: "End of the availability"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the availability"
+      start:
+        type: "string"
+        format: "date-time"
+        description: "Start of the availability"
+    description: "The availability matching the request"
+  response_get_BookingEnvelope_booking_customer:
+    properties:
+      email:
+        type: "string"
+        format: "email"
+        description: "Email address of the customer"
+      firstName:
+        type: "string"
+        description: "First name of the customer"
+      lastName:
+        type: "string"
+        description: "Last name of the customer"
+      phone:
+        type: "string"
+        format: "phone"
+        description: "Phone number of the customer"
+    description: "Customer for the booking"
+  response_get_BookingEnvelope_booking_rate_times:
+    properties:
+      close:
+        type: "string"
+        description: "Close time"
+      open:
+        type: "string"
+        description: "Open time"
+  response_get_BookingEnvelope_booking_rate_hours:
+    properties:
+      dates:
+        type: "array"
+        description: "Specific dates to which this rule applies"
+        items:
+          type: "string"
+      daysOfWeek:
+        type: "array"
+        description: "Applicable days of week. 0 is undefined, 1 is Monday, etc"
+        items:
+          type: "integer"
+      times:
+        type: "array"
+        description: "Open/Close times"
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_times"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid"
+  response_get_BookingEnvelope_booking_rate_net:
+    properties:
+      amount:
+        type: "integer"
+        format: "int64"
+        description: "Amount in cents"
+      currency:
+        type: "string"
+        description: "ISO 4217 currency code, e.g.: USD, EUR, CHF"
+        pattern: "^[a-zA-Z]{3}$"
+    description: "Net price"
+  response_get_BookingEnvelope_booking_rate_retail:
+    properties:
+      amount:
+        type: "integer"
+        format: "int64"
+        description: "Amount in cents"
+      currency:
+        type: "string"
+        description: "ISO 4217 currency code, e.g.: USD, EUR, CHF"
+        pattern: "^[a-zA-Z]{3}$"
+    description: "Retail price"
+  response_get_BookingEnvelope_booking_rate_travelerType:
+    properties:
+      ageBand:
+        type: "string"
+        description: "Age band of the traveler type"
+        enum:
+        - "ADULT"
+        - "ANY"
+        - "CHILD"
+        - "INFANT"
+        - "SENIOR"
+        - "STUDENT"
+        - "UNKNOWN"
+        - "YOUTH"
+      maxAge:
+        type: "integer"
+        format: "int32"
+        description: "Maximum age (inclusive) of the traveler type"
+      minAge:
+        type: "integer"
+        format: "int32"
+        description: "Minimum age (inclusive) of the traveler type"
+      name:
+        type: "string"
+        description: "Name of the traveler type, e.g. Diver, Observer, Adult, Military"
+    description: "Traveler type for the rate price"
+  response_get_BookingEnvelope_booking_rate_prices:
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate price"
+      labels:
+        type: "array"
+        description: "Labels (tags)"
+        items:
+          type: "string"
+      name:
+        type: "string"
+        description: "Name of the rate price"
+      net:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_net"
+      retail:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_retail"
+      status:
+        type: "string"
+        description: "Status of the rate price"
+        enum:
+        - "ACTIVE"
+        - "INACTIVE"
+      travelerType:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_travelerType"
+  response_get_BookingEnvelope_booking_rate:
+    properties:
+      cancelable:
+        type: "boolean"
+        description: "Can a booking made with this rate be cancelled"
+      code:
+        type: "string"
+        description: "Short textual code representing the rate"
+      cutoff:
+        type: "integer"
+        format: "int64"
+        description: "Pre-arrival booking cutoff, in minutes. Must be > 0, if type\
+          \ is Freesale"
+      holdable:
+        type: "boolean"
+        description: "Can a booking made for this rate be held"
+      holdablePeriod:
+        type: "integer"
+        format: "int64"
+        description: "Hold length, in seconds. Must be > 0, if type is Reserved"
+      hours:
+        type: "array"
+        description: "Rules for specifying open hours for this rate"
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_hours"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      maxTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Maximum number of travelers to qualify for this rate"
+      minTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Minimum number of travelers to qualify for this rate. Must be\
+          \ at least 1."
+      name:
+        type: "string"
+        description: "Human-friendly name for the rate"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      prices:
+        type: "array"
+        description: "List of prices for this rate."
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_prices"
+      productId:
+        type: "string"
+        format: "uuid"
+        description: "ID of the owning product"
+      refundable:
+        type: "boolean"
+        description: "Can a booking made with this rate be refunded"
+      title:
+        type: "string"
+        description: "Display name for the rate"
+      type:
+        type: "string"
+        description: "Type of rate"
+        enum:
+        - "FREESALE"
+        - "PASS"
+        - "RESERVED"
+        - "UNKNOWN"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid_1"
+      version:
+        type: "number"
+        format: "int32"
+        description: "Internal version number"
+    description: "Rate selection for the booking item"
+  response_get_BookingEnvelope_booking_traveler:
+    properties:
+      age:
+        type: "integer"
+        format: "int32"
+        description: "Age of the traveler"
+      country:
+        type: "string"
+        description: "Origin country of the traveler, as an ISO 3316-1 alpha-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      email:
+        type: "string"
+        format: "email"
+        description: "Email address of the traveler"
+      firstName:
+        type: "string"
+        description: "First name of the traveler"
+      gender:
+        type: "string"
+        description: "Gender of the traveler"
+        enum:
+        - "MALE"
+        - "FEMALE"
+      isLead:
+        type: "boolean"
+        description: "Indicates lead traveler status"
+      lang:
+        type: "string"
+        description: "Spoken language of the traveler, as an ISO 639-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      lastName:
+        type: "string"
+        description: "Last name of the traveler"
+      phone:
+        type: "string"
+        format: "phone"
+        description: "Phone number of the traveler"
+      type:
+        type: "string"
+        description: "Traveler type"
+        enum:
+        - "ANY"
+        - "INFANT"
+        - "CHILD"
+        - "YOUTH"
+        - "ADULT"
+        - "SENIOR"
+    description: "Traveler for the booking item"
+  response_get_BookingEnvelope_booking_items:
+    properties:
+      availabilityId:
+        type: "string"
+        format: "uuid"
+        description: "ID of availability selection"
+      ext:
+        type: "object"
+        description: "Extended data for the booking item"
+        properties: {}
+      priceId:
+        type: "string"
+        description: "ID of price selection for the booking item. This must match\
+          \ one of the price IDs within the rate that is being used to create this\
+          \ booking"
+      quantity:
+        type: "integer"
+        format: "int32"
+        description: "Quantity of the booking item"
+      rate:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_rate"
+      rateId:
+        type: "string"
+        format: "uuid"
+        description: "Rate ID for the booking item Rate"
+      startTime:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "string"
+        description: "Status of the booking item"
+        enum:
+        - "CANCELLED"
+        - "DELETED"
+        - "EXPIRED"
+        - "OPEN"
+        - "REDEEMED"
+        - "REFUNDED"
+        - "UNKNOWN"
+      supplierId:
+        type: "string"
+        format: "uuid"
+        description: "ID of supplier offering product"
+      traveler:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_traveler"
+  response_get_BookingEnvelope_booking_barcode:
+    properties:
+      format:
+        type: "string"
+        description: "Format of the barcode"
+        enum:
+        - "CODE128"
+        - "EAN13"
+        - "QR_CODE"
+        - "TEXT"
+        - "UNKNOWN"
+        - "UPCA"
+      value:
+        type: "string"
+        description: "Value of the barcode"
+  response_get_BookingEnvelope_booking_leadTraveler:
+    properties:
+      age:
+        type: "integer"
+        format: "int32"
+        description: "Age of the traveler"
+      country:
+        type: "string"
+        description: "Origin country of the traveler, as an ISO 3316-1 alpha-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      email:
+        type: "string"
+        format: "email"
+        description: "Email address of the traveler"
+      firstName:
+        type: "string"
+        description: "First name of the traveler"
+      gender:
+        type: "string"
+        description: "Gender of the traveler"
+        enum:
+        - "MALE"
+        - "FEMALE"
+      isLead:
+        type: "boolean"
+        description: "Indicates lead traveler status"
+      lang:
+        type: "string"
+        description: "Spoken language of the traveler, as an ISO 639-3 code"
+        pattern: "^[A-Za-z]{3}$"
+      lastName:
+        type: "string"
+        description: "Last name of the traveler"
+      phone:
+        type: "string"
+        format: "phone"
+        description: "Phone number of the traveler"
+      type:
+        type: "string"
+        description: "Traveler type"
+        enum:
+        - "ANY"
+        - "INFANT"
+        - "CHILD"
+        - "YOUTH"
+        - "ADULT"
+        - "SENIOR"
+  response_get_BookingEnvelope_booking_tickets:
+    properties:
+      barcode:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_barcode"
+      bookingItemId:
+        type: "string"
+      guests:
+        type: "array"
+        items:
+          $ref: "#/definitions/request_post_BookingEnvelope_booking_guests"
+      leadTraveler:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_leadTraveler"
+      status:
+        type: "integer"
+  response_get_BookingEnvelope_booking:
+    properties:
+      channelId:
+        type: "string"
+        format: "uuid"
+        description: "Channel ID requesting the booking"
+      customer:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_customer"
+      ext:
+        type: "object"
+        description: "Extended data for the booking"
+        properties: {}
+      holdExt:
+        type: "object"
+        description: "Extended data for the hold associated with the booking"
+        properties: {}
+      holdId:
+        type: "string"
+        format: "uuid"
+        description: "Optional Hold ID"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the booking. This field can optionally be provided on\
+          \ create. If a valid UUID is provided on create, it will be saved as the\
+          \ object's ID. Otherwise, the object will receive a generated ID."
+      items:
+        type: "array"
+        description: "Items for the booking"
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_items"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      status:
+        type: "string"
+        description: "Status of the booking"
+        enum:
+        - "CANCELLED"
+        - "DELETED"
+        - "FAILED"
+        - "OLCI_PENDING"
+        - "OPEN"
+        - "PENDING"
+        - "UNKNOWN"
+      tickets:
+        type: "array"
+        description: "Tickets for the booking"
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_tickets"
+      version:
+        type: "integer"
+        format: "int32"
+        description: "Internal version number"
+    description: "The booking"
+  response_get_HoldEnvelope_hold_rate:
+    properties:
+      cancelable:
+        type: "boolean"
+        description: "Can a booking made with this rate be cancelled"
+      code:
+        type: "string"
+        description: "Short textual code representing the rate"
+      cutoff:
+        type: "integer"
+        format: "int64"
+        description: "Pre-arrival booking cutoff, in minutes. Must be > 0, if type\
+          \ is Freesale"
+      holdable:
+        type: "boolean"
+        description: "Can a booking made for this rate be held"
+      holdablePeriod:
+        type: "integer"
+        format: "int64"
+        description: "Hold length, in seconds. Must be > 0, if type is Reserved"
+      hours:
+        type: "array"
+        description: "Rules for specifying open hours for this rate"
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_hours"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      maxTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Maximum number of travelers to qualify for this rate"
+      minTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Minimum number of travelers to qualify for this rate. Must be\
+          \ at least 1."
+      name:
+        type: "string"
+        description: "Human-friendly name for the rate"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      prices:
+        type: "array"
+        description: "List of prices for this rate."
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_prices"
+      productId:
+        type: "string"
+        format: "uuid"
+        description: "ID of the owning product"
+      refundable:
+        type: "boolean"
+        description: "Can a booking made with this rate be refunded"
+      title:
+        type: "string"
+        description: "Display name for the rate"
+      type:
+        type: "string"
+        description: "Type of rate"
+        enum:
+        - "FREESALE"
+        - "PASS"
+        - "RESERVED"
+        - "UNKNOWN"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid_1"
+      version:
+        type: "number"
+        format: "int32"
+        description: "Internal version number"
+    description: "Rate selection for the Hold item"
+  response_get_HoldEnvelope_hold_items:
+    properties:
+      at:
+        type: "string"
+        format: "date-time"
+        description: "Availability time for the Hold item"
+      availabilityId:
+        type: "string"
+        format: "uuid"
+        description: "Availability selection for the Hold item"
+      ext:
+        type: "object"
+        description: "Extended data for the Hold item"
+        properties: {}
+      priceId:
+        type: "string"
+        description: "ID of price selection for the booking item. This must match\
+          \ one of the price IDs within the rate that is being used to create this\
+          \ hold"
+      quantity:
+        type: "integer"
+        format: "int32"
+        description: "Quantity of the Hold item"
+      rate:
+        $ref: "#/definitions/response_get_HoldEnvelope_hold_rate"
+      rateId:
+        type: "string"
+        format: "uuid"
+        description: "Rate ID for the hold item Rate"
+      supplierId:
+        type: "string"
+        format: "uuid"
+        description: "Supplier offering the product"
+      travelerType:
+        type: "string"
+        description: "Traveler type for the Hold item"
+        enum:
+        - "ANY"
+        - "INFANT"
+        - "CHILD"
+        - "YOUTH"
+        - "ADULT"
+        - "SENIOR"
+  response_get_HoldEnvelope_hold:
+    properties:
+      expires:
+        type: "string"
+        format: "date-time"
+        description: "Datetime of hold expiration"
+      ext:
+        type: "object"
+        description: "Extended data for the hold"
+        properties: {}
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the hold. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      items:
+        type: "array"
+        description: "Items in the hold"
+        items:
+          $ref: "#/definitions/response_get_HoldEnvelope_hold_items"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      retrieved:
+        type: "string"
+        format: "date-time"
+        description: "Datetime of retrieval"
+      status:
+        type: "string"
+        description: "Status of the hold"
+        enum:
+        - "ACTIVE"
+        - "EXPIRED"
+        - "FAILED"
+        - "PENDING"
+        - "RELEASED"
+        - "UNKNOWN"
+  response_post_BookingEnvelope_booking_rate:
+    properties:
+      cancelable:
+        type: "boolean"
+        description: "Can a booking made with this rate be cancelled"
+      code:
+        type: "string"
+        description: "Short textual code representing the rate"
+      cutoff:
+        type: "integer"
+        format: "int64"
+        description: "Pre-arrival booking cutoff, in minutes. Must be > 0, if type\
+          \ is Freesale"
+      holdable:
+        type: "boolean"
+        description: "Can a booking made for this rate be held"
+      holdablePeriod:
+        type: "integer"
+        format: "int64"
+        description: "Hold length, in seconds. Must be > 0, if type is Reserved"
+      hours:
+        type: "array"
+        description: "Rules for specifying open hours for this rate"
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_hours"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      maxTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Maximum number of travelers to qualify for this rate"
+      minTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Minimum number of travelers to qualify for this rate. Must be\
+          \ at least 1."
+      name:
+        type: "string"
+        description: "Human-friendly name for the rate"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      prices:
+        type: "array"
+        description: "List of prices for this rate."
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_prices"
+      productId:
+        type: "string"
+        format: "uuid"
+        description: "ID of the owning product"
+      refundable:
+        type: "boolean"
+        description: "Can a booking made with this rate be refunded"
+      title:
+        type: "string"
+        description: "Display name for the rate"
+      type:
+        type: "string"
+        description: "Type of rate"
+        enum:
+        - "FREESALE"
+        - "PASS"
+        - "RESERVED"
+        - "UNKNOWN"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid_1"
+      version:
+        type: "number"
+        format: "int32"
+        description: "Internal version number"
+        readOnly: true
+    description: "Rate selection for the booking item"
+  response_post_BookingEnvelope_booking_items:
+    properties:
+      availabilityId:
+        type: "string"
+        format: "uuid"
+        description: "ID of availability selection"
+      ext:
+        type: "object"
+        description: "Extended data for the booking item"
+        properties: {}
+      priceId:
+        type: "string"
+        description: "ID of price selection for the booking item. This must match\
+          \ one of the price IDs within the rate that is being used to create this\
+          \ booking"
+      quantity:
+        type: "integer"
+        format: "int32"
+        description: "Quantity of the booking item"
+      rate:
+        $ref: "#/definitions/response_post_BookingEnvelope_booking_rate"
+      rateId:
+        type: "string"
+        format: "uuid"
+        description: "Rate ID for the booking item Rate"
+      startTime:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "string"
+        description: "Status of the booking item"
+        readOnly: true
+        enum:
+        - "CANCELLED"
+        - "DELETED"
+        - "EXPIRED"
+        - "OPEN"
+        - "REDEEMED"
+        - "REFUNDED"
+        - "UNKNOWN"
+      supplierId:
+        type: "string"
+        format: "uuid"
+        description: "ID of supplier offering product"
+      traveler:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_traveler"
+  response_post_BookingEnvelope_booking:
+    properties:
+      channelId:
+        type: "string"
+        format: "uuid"
+        description: "Channel ID requesting the booking"
+      customer:
+        $ref: "#/definitions/response_get_BookingEnvelope_booking_customer"
+      ext:
+        type: "object"
+        description: "Extended data for the booking"
+        properties: {}
+      holdExt:
+        type: "object"
+        description: "Extended data for the hold associated with the booking"
+        properties: {}
+      holdId:
+        type: "string"
+        format: "uuid"
+        description: "Optional Hold ID"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the booking. This field can optionally be provided on\
+          \ create. If a valid UUID is provided on create, it will be saved as the\
+          \ object's ID. Otherwise, the object will receive a generated ID."
+      items:
+        type: "array"
+        description: "Items for the booking"
+        items:
+          $ref: "#/definitions/response_post_BookingEnvelope_booking_items"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      status:
+        type: "string"
+        description: "Status of the booking"
+        readOnly: true
+        enum:
+        - "CANCELLED"
+        - "DELETED"
+        - "FAILED"
+        - "OLCI_PENDING"
+        - "OPEN"
+        - "PENDING"
+        - "UNKNOWN"
+      tickets:
+        type: "array"
+        description: "Tickets for the booking"
+        readOnly: true
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_tickets"
+      version:
+        type: "integer"
+        format: "int32"
+        description: "Internal version number"
+        readOnly: true
+    description: "The booking"
+  response_post_HoldEnvelope_hold_rate:
+    properties:
+      cancelable:
+        type: "boolean"
+        description: "Can a booking made with this rate be cancelled"
+      code:
+        type: "string"
+        description: "Short textual code representing the rate"
+      cutoff:
+        type: "integer"
+        format: "int64"
+        description: "Pre-arrival booking cutoff, in minutes. Must be > 0, if type\
+          \ is Freesale"
+      holdable:
+        type: "boolean"
+        description: "Can a booking made for this rate be held"
+      holdablePeriod:
+        type: "integer"
+        format: "int64"
+        description: "Hold length, in seconds. Must be > 0, if type is Reserved"
+      hours:
+        type: "array"
+        description: "Rules for specifying open hours for this rate"
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_hours"
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the rate. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      maxTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Maximum number of travelers to qualify for this rate"
+      minTravelers:
+        type: "integer"
+        format: "int64"
+        description: "Minimum number of travelers to qualify for this rate. Must be\
+          \ at least 1."
+      name:
+        type: "string"
+        description: "Human-friendly name for the rate"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      prices:
+        type: "array"
+        description: "List of prices for this rate."
+        items:
+          $ref: "#/definitions/response_get_BookingEnvelope_booking_rate_prices"
+      productId:
+        type: "string"
+        format: "uuid"
+        description: "ID of the owning product"
+      refundable:
+        type: "boolean"
+        description: "Can a booking made with this rate be refunded"
+      title:
+        type: "string"
+        description: "Display name for the rate"
+      type:
+        type: "string"
+        description: "Type of rate"
+        enum:
+        - "FREESALE"
+        - "PASS"
+        - "RESERVED"
+        - "UNKNOWN"
+      valid:
+        $ref: "#/definitions/request_post_BookingEnvelope_booking_rate_valid_1"
+      version:
+        type: "number"
+        format: "int32"
+        description: "Internal version number"
+        readOnly: true
+    description: "Rate selection for the Hold item"
+  response_post_HoldEnvelope_hold_items:
+    properties:
+      at:
+        type: "string"
+        format: "date-time"
+        description: "Availability time for the Hold item"
+      availabilityId:
+        type: "string"
+        format: "uuid"
+        description: "Availability selection for the Hold item"
+      ext:
+        type: "object"
+        description: "Extended data for the Hold item"
+        properties: {}
+      priceId:
+        type: "string"
+        description: "ID of price selection for the booking item. This must match\
+          \ one of the price IDs within the rate that is being used to create this\
+          \ hold"
+      quantity:
+        type: "integer"
+        format: "int32"
+        description: "Quantity of the Hold item"
+      rate:
+        $ref: "#/definitions/response_post_HoldEnvelope_hold_rate"
+      rateId:
+        type: "string"
+        format: "uuid"
+        description: "Rate ID for the hold item Rate"
+      supplierId:
+        type: "string"
+        format: "uuid"
+        description: "Supplier offering the product"
+      travelerType:
+        type: "string"
+        description: "Traveler type for the Hold item"
+        enum:
+        - "ANY"
+        - "INFANT"
+        - "CHILD"
+        - "YOUTH"
+        - "ADULT"
+        - "SENIOR"
+  response_post_HoldEnvelope_hold:
+    properties:
+      expires:
+        type: "string"
+        format: "date-time"
+        description: "Datetime of hold expiration"
+      ext:
+        type: "object"
+        description: "Extended data for the hold"
+        properties: {}
+      id:
+        type: "string"
+        format: "uuid"
+        description: "ID of the hold. This field can optionally be provided on create.\
+          \ If a valid UUID is provided on create, it will be saved as the object's\
+          \ ID. Otherwise, the object will receive a generated ID."
+      items:
+        type: "array"
+        description: "Items in the hold"
+        items:
+          $ref: "#/definitions/response_post_HoldEnvelope_hold_items"
+      partnerId:
+        type: "string"
+        description: "A Partner ID can be used to store a unique key in a partner's\
+          \ system."
+      retrieved:
+        type: "string"
+        format: "date-time"
+        description: "Datetime of retrieval"
+        readOnly: true
+      status:
+        type: "string"
+        description: "Status of the hold"
+        readOnly: true
+        enum:
+        - "ACTIVE"
+        - "EXPIRED"
+        - "FAILED"
+        - "PENDING"
+        - "RELEASED"
+        - "UNKNOWN"
+  response_post_PendingEnvelope_meta:
+    properties:
+      reqId:
+        type: "string"
+        format: "uuid"
+        description: "Request ID"
+externalDocs:
+  description: "Partner API"
+  url: "https://channel.develop.redeam.io"
