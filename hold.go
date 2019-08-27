@@ -56,5 +56,9 @@ func main() {
 		panic(err)
 	}
 
+	for _, price := range respRate.Rate.Prices {
+
+	}
+
 	fmt.Println(respRate, resp, err)
 }

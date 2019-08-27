@@ -15,8 +15,21 @@ type (
 		Client     *swclient.APIClient
 		productID  string
 		supplierID string
+		rateIDs []string
 	}
 )
+
+func (ch *ChannelsClient) SetRateIDs(rateIDs []string) {
+	ch.rateIDs = rateIDs
+}
+
+func (ch *ChannelsClient) RateIDs() []string {
+	return ch.rateIDs
+}
+
+func (ch *ChannelsClient) SetRateID(rateID string) {
+	ch.rateIDs = append(ch.rateIDs,rateID)
+}
 
 func (ch *ChannelsClient) ProductID() string {
 	return ch.productID

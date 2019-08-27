@@ -68,7 +68,6 @@ func (ch *ChannelsClient) CreateRate() (*swclient.RequestPostRateEnvelope, error
 }
 
 func (ch *ChannelsClient) GenPrice() swclient.RequestPostRateEnvelopeRatePrices {
-
 	return swclient.RequestPostRateEnvelopeRatePrices{
 		Id: uuid.New().String(),
 		Labels: []string{
