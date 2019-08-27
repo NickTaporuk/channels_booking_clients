@@ -57,7 +57,7 @@ func (ch *ChannelsClient) CreateRate() (*swclient.RequestPostRateEnvelope, error
 				From:  t,
 				Until: tClose,
 			},
-			Type_:"RESERVED",
+			Type_: "RESERVED",
 		},
 		Meta: &swclient.RequestPostCreateChannelEnvelopeMeta{
 			ReqId: uuid.New().String(),
@@ -70,7 +70,7 @@ func (ch *ChannelsClient) CreateRate() (*swclient.RequestPostRateEnvelope, error
 func (ch *ChannelsClient) GenPrice() swclient.RequestPostRateEnvelopeRatePrices {
 
 	return swclient.RequestPostRateEnvelopeRatePrices{
-		Id: gofakeit.UUID(),
+		Id: uuid.New().String(),
 		Labels: []string{
 			"A",
 			"B",
