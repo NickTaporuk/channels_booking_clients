@@ -8,6 +8,7 @@ const (
 	XAPIKey    = "key-redeam-qa-4f9c3z68"
 	XAPISecret = "secret-redeam-qa-v8z73c9x"
 	SupplierID = "b0105adc-3693-4e42-8905-cbbd97f80bbb"
+	ChannelId = "546bd79e-f7fd-48c1-977e-a65ad1b99f88"
 )
 
 type (
@@ -16,8 +17,17 @@ type (
 		productID  string
 		supplierID string
 		rateIDs []string
+		priceIDs []string
 	}
 )
+
+func (ch *ChannelsClient) PriceIDs() []string {
+	return ch.priceIDs
+}
+
+func (ch *ChannelsClient) SetPriceIDs(priceIDs []string) {
+	ch.priceIDs = priceIDs
+}
 
 func (ch *ChannelsClient) SetRateIDs(rateIDs []string) {
 	ch.rateIDs = rateIDs
