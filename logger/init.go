@@ -69,9 +69,7 @@ func (l *LocalLogger) Init(data map[string]string) error {
 	if err != nil {
 		return err
 	}
-	//defer f.Close()
 
-	//logger.SetOutput(f)
 	mw := io.MultiWriter(os.Stdout, f)
 
 	logger.SetOutput(mw)

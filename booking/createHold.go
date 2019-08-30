@@ -7,6 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	// RFC3339Millis represents a ISO8601 format to millis instead of to nanos
+	RFC3339Millis = "2006-01-02T15:04:05.000Z07:00"
+)
 func (b *BookingClient) CreateHold(rateID, supplierID, priceID string) (swclient.RequestPostHoldEnvelope, error) {
 
 	var (
@@ -15,10 +19,10 @@ func (b *BookingClient) CreateHold(rateID, supplierID, priceID string) (swclient
 	)
 
 	expires := time.Now().AddDate(0, 0, 1)
-	at := time.Now()
+	at := time.Now().UTC()
 
-	additionalFields["createdAt"] = at.Format(time.RFC3339)
-	additionalFields["updatedAt"] = at.Format(time.RFC3339)
+	additionalFields["createdAt"] = at.Format(RFC3339Millis)
+	additionalFields["updatedAt"] = at.Format(RFC3339Millis)
 
 	var ext interface{} = additionalFields
 
