@@ -60,7 +60,7 @@ brews:
     # Template for the url which is determined by the given Token (github or gitlab)
     # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     # Default for gitlab is "https://gitlab.com/<repo_owner>/<repo_name>/uploads/{{ .ArtifactUploadHash }}/{{ .ArtifactName }}"
-    url_template: "https://github.com/NickTaporuk/channels_booking_clients/releases/{{ .Tag }}/{{ .ArtifactName }}"
+    url_template: "https://github.com/NickTaporuk/channels_booking_clients/releases/{{.Tag}}/{{.ArtifactName}}"
 
     # Allows you to set a custom download strategy.
     # Default is empty.
@@ -98,7 +98,7 @@ brews:
     # If set to auto, the release will not be uploaded to the homebrew tap
     # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
     # Default is false.
-    skip_upload: true
+#    skip_upload: true
 
     # Custom block for brew.
     # Can be used to specify alternate downloads for devel or head releases.
