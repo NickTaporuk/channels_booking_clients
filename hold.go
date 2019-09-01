@@ -2,17 +2,19 @@ package main
 
 import (
 	"context"
-	"github.com/NickTaporuk/channels_booking_clients/booking"
-	"github.com/sirupsen/logrus"
+
 	"net/http"
 
 	bookingCl "bitbucket.org/redeam/integration-booking/swclient"
 	"bitbucket.org/redeam/integration-channel/swclient"
+	"github.com/NickTaporuk/channels_booking_clients/booking"
 	"github.com/NickTaporuk/channels_booking_clients/channels"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
+	"github.com/sirupsen/logrus"
+	_ "github.com/spf13/viper"
 )
 
-func main() {
+func Run() {
 	var (
 		channelsApiHeaders = make(map[string]string)
 		channelsClient     *channels.ChannelsClient
@@ -68,7 +70,7 @@ func main() {
 	channelsClient.SetProductID(respProd.Product.Id)
 
 	if respProd.Product == nil {
-		lgr.Logger().WithFields(logrus.Fields{"request":product}).Fatal(err)
+		lgr.Logger().WithFields(logrus.Fields{"request": product}).Fatal(err)
 
 	}
 
@@ -79,7 +81,7 @@ func main() {
 
 	respRate, resp, err := channelsClient.Client.RatesApi.CreateRate(ctx, channels.SupplierID, channelsClient.ProductID(), *rate)
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"request":rate}).Fatal(err)
+		lgr.Logger().WithFields(logrus.Fields{"request": rate}).Fatal(err)
 	}
 	lgr.Logger().WithField("Rate", "done").WithFields(logrus.Fields{"Rate response": respRate}).Info("Rate creation was done")
 	lgr.Logger().Println("<==============================================================================================================================================================>")
@@ -105,7 +107,7 @@ func main() {
 
 	bookingClient, err = booking.NewBookingClient(channelsApiHeaders)
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"request":channelBinding}).Fatal("Booking client is not initialized")
+		lgr.Logger().WithFields(logrus.Fields{"request": channelBinding}).Fatal("Booking client is not initialized")
 	}
 
 	priceID := channelsClient.PriceIDs()[0]
@@ -126,8 +128,8 @@ func main() {
 	hold, err := bookingClient.CreateHold(rateID, channels.SupplierID, priceID);
 	respHold, resp, err = bookingClient.Client.HoldsApi.CreateHold(ctx, hold)
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"request":hold, "resp body": resp.Body}).Fatal(err)
+		lgr.Logger().WithFields(logrus.Fields{"request": hold, "resp body": resp.Body}).Fatal(err)
 	}
-	lgr.Logger().WithField("Hold", "done").WithFields(logrus.Fields{"Hold response": respHold, "request":hold}).Info("Hold creation was done")
+	lgr.Logger().WithField("Hold", "done").WithFields(logrus.Fields{"Hold response": respHold, "request": hold}).Info("Hold creation was done")
 	lgr.Logger().Println("<==============================================================================================================================================================>")
 }
