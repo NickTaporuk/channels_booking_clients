@@ -1,1 +1,17 @@
-{}
+{
+  "meta": {
+    "reqId": ""
+  },
+  "supplier": {
+    "code": "",
+    "name": "",
+    "travelerTypes": [
+      {
+        "ageBand": "ANY",
+        "maxAge": 25,
+        "minAge": 18,
+        "name": "Adult"
+      }
+    ]
+  }
+}

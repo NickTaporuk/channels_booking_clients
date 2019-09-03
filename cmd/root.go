@@ -16,9 +16,16 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"os"
 
+	bookingCl "bitbucket.org/redeam/integration-booking/swclient"
+	"bitbucket.org/redeam/integration-channel/swclient"
+	"github.com/NickTaporuk/channels_booking_clients/booking"
+	"github.com/NickTaporuk/channels_booking_clients/channels"
+	"github.com/NickTaporuk/channels_booking_clients/logger"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -38,10 +45,41 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 }
 
+var (
+	channelsApiHeaders = make(map[string]string)
+	channelsClient     *channels.ChannelsClient
+	bookingClient      *booking.BookingClient
+	ctx                = context.Background()
+	getSupplier        swclient.ResponseGetSupplierEnvelope
+	channelBinding     *swclient.RequestPostCreateChannelEnvelope
+	respChan           swclient.ResponsePostChannelRatesEnvelope
+	respHold           bookingCl.ResponsePostHoldEnvelope
+	resp               *http.Response
+	err                error
+	rates              []string
+	prices             []string
+	data               = make(map[string]string)
+	lgr                *logger.LocalLogger
+	book               *bookingCl.RequestPostBookingEnvelope
+	respBooking        bookingCl.ResponsePostBookingEnvelope
+)
+
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	var (
+		err error
+	)
+	defer lgr.Close()
+
+	data["level"] = "debug"
+	err = lgr.Init(data)
+
+	if err != nil {
+		panic(err)
+	}
+
+	if err = rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -50,6 +88,23 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
+	// TODO: need move to cli parameters
+	data["level"] = "debug"
+	lgr = &logger.LocalLogger{}
+
+	defer lgr.Close()
+
+	err = lgr.Init(data)
+
+	if err != nil {
+		panic(err)
+	}
+	//
+	channelsClient, err = channels.NewChannelClient(channelsApiHeaders)
+
+	if err != nil {
+		panic(err)
+	}
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.

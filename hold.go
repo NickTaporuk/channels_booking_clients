@@ -133,3 +133,7 @@ func Run() {
 	lgr.Logger().WithField("Hold", "done").WithFields(logrus.Fields{"Hold response": respHold, "request": hold}).Info("Hold creation was done")
 	lgr.Logger().Println("<==============================================================================================================================================================>")
 }
+
+//func main() {
+//	Run()
+//}

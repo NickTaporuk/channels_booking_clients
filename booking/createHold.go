@@ -1,6 +1,6 @@
 package booking
 
-import (
+import(
 	"time"
 
 	"bitbucket.org/redeam/integration-booking/swclient"
@@ -11,6 +11,7 @@ const (
 	// RFC3339Millis represents a ISO8601 format to millis instead of to nanos
 	RFC3339Millis = "2006-01-02T15:04:05.000Z07:00"
 )
+
 func (b *BookingClient) CreateHold(rateID, supplierID, priceID string) (swclient.RequestPostHoldEnvelope, error) {
 
 	var (
