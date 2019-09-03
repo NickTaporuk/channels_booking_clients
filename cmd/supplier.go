@@ -43,11 +43,11 @@ var supplierCmd = &cobra.Command{
 		var (
 			err error
 		)
-
-		if len(args) > 1 {
-			lgr.Logger().WithField("Supplier", "error").WithFields(logrus.Fields{"error": ErrorSuppliersIsMoreThanOne,}).Error(err)
-			return ErrorSuppliersIsMoreThanOne
-		}
+		//fmt.Println(args)
+		//if len(args) > 1 {
+		//	lgr.Logger().WithField("Supplier", "error").WithFields(logrus.Fields{"error": ErrorSuppliersIsMoreThanOne,"args":args}).Error(err)
+		//	return ErrorSuppliersIsMoreThanOne
+		//}
 
 		v := args[0]
 		if err = CheckIsUUIDTypeOfSupplierFlagValue(v); err == nil {
@@ -72,6 +72,7 @@ var supplierCmd = &cobra.Command{
 				supplier.Meta.ReqId = uuid.New().String()
 				supplier.Supplier.Id = uuid.New().String()
 				supplier.Supplier.Code = faker.App().Author() + faker.App().Name()
+				supplier.Supplier.Name = faker.App().Author() + faker.App().Name()
 
 				lgr.Logger().WithFields(logrus.Fields{"file data": string(data),}).Debug(" data from supplier json file")
 				lgr.Logger().WithFields(logrus.Fields{"Supplier": supplier,}).Debug(supplier)

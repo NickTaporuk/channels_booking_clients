@@ -59,6 +59,7 @@ func Run() {
 	lgr.Logger().WithField("Supplier", "done").WithFields(logrus.Fields{"Supplier response": getSupplier, "response status": resp.StatusCode}).Info("Supplier creation was done")
 
 	channelsClient.SetSupplierID(getSupplier.Supplier.Id)
+	lgr.Logger().Println("<==============================================================================================================================================================>")
 
 	product, err := channelsClient.CreateProduct()
 
