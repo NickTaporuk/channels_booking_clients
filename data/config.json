@@ -11,15 +11,15 @@
     "XAPISecret": "secret-redeam-qa-v8z73c9x"
   },
   "supplier": {
-    "id": "uuid",
+    "id": "34019e25-c53c-436e-8887-827d3789ddbc",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/supplier.json"
   },
   "product": {
-    "id": "uuid",
+    "id": "7998e353-e0c9-49d5-b5f8-d9cfb81f827b",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/product.json"
   },
   "rate": {
-    "id": "uuid",
+    "id": "1efda848-4cef-4197-97ed-b95fef8fa2b5",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/rate.json"
   },
   "channelBinding": {
@@ -33,5 +33,6 @@
   "hold": {
     "id": "uuid",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/hold.json"
-  }
+  },
+  "stopAfterEntity": "rate"
 }

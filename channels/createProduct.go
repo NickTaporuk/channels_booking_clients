@@ -1,63 +1,43 @@
 package channels
 
 import (
-	"time"
+	"context"
+	"encoding/json"
 
 	"bitbucket.org/redeam/integration-channel/swclient"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
+	"syreclabs.com/go/faker"
 )
 
 // CreateProduct is used to create new product of channel api
-func (ch *ChannelsClient) CreateProduct() (*swclient.RequestPostProductEnvelope, error) {
+func (ch *ChannelsClient) CreateProduct(data *[]byte, ctx *context.Context) error {
 	var (
-		product = swclient.RequestPostProductEnvelope{}
+		product = new(swclient.RequestPostProductEnvelope)
+		err     error
 	)
 
-	t := time.Now()
-	tClose := time.Now().AddDate(1, 1, 1) /*.Format("2019-08-02T19:34:49Z")*/
-
-	product = swclient.RequestPostProductEnvelope{
-		Product: &swclient.RequestPostProductEnvelopeProduct{
-			Code: uuid.New().String(),
-			Hours: []swclient.RequestPostProductEnvelopeProductHours{
-				{
-					DaysOfWeek: []int32{1, 2, 3, 4, 5, 6, 7},
-					Times: []swclient.RequestPostProductEnvelopeProductTimes{
-						{
-							Close: "12:30",
-							Open:  "08:00",
-						},
-					},
-					Valid: &swclient.RequestPostProductEnvelopeProductValid{
-						From:  t,
-						Until: tClose,
-					},
-				},
-			},
-			Location: &swclient.RequestPostProductEnvelopeProductLocation{
-				Address: &swclient.RequestPostProductEnvelopeProductLocationAddress{
-					CountryCode:   "USA",
-					Locality:      "City",
-					PostalCode:    "postalCode",
-					Region:        "Region",
-					StreetAddress: "Street 1",
-				},
-				LongLat: &swclient.RequestPostProductEnvelopeProductLocationLongLat{
-					Latitude:  1.00,
-					Longitude: 1.00,
-				},
-				Name:      "Location A",
-				Notes:     "",
-				UtcOffset: "+01:00",
-			},
-			Name:   "Nick Kuropatkin Test product 2",
-			Status: "UNKNOWN",
-			Title:  "Nick Kuropatkin Test product 2",
-		},
-		Meta: &swclient.RequestPostCreateChannelEnvelopeMeta{
-			ReqId: uuid.New().String(),
-		},
+	if err = json.Unmarshal([]byte(*data), &product); err != nil {
+		return err
 	}
 
-	return &product, nil
+	product.Meta = &swclient.RequestPostCreateChannelEnvelopeMeta{ReqId: uuid.New().String()}
+
+	product.Product.Code = faker.App().Author() + faker.App().Name()
+	product.Product.Id = uuid.New().String()
+	product.Product.Description = faker.App().Author() + faker.App().Name()
+
+	ch.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from product json file")
+	ch.logger.Logger().WithFields(logrus.Fields{"Product": product,}).Debug("product debug")
+
+	ResponsePostProductEnvelope, resp, err := ch.Client.ProductsApi.CreateProduct(*ctx, ch.supplierID, *product)
+
+	ch.logger.Logger().WithFields(logrus.Fields{"ResponsePostProductEnvelope": ResponsePostProductEnvelope, "create product response resp statusCode": resp.StatusCode, "err": err}).Debug("response post product envelope")
+
+	if err != nil {
+		ch.logger.Logger().WithFields(logrus.Fields{"ResponsePostProductEnvelope": ResponsePostProductEnvelope, "response resp statusCode": resp.StatusCode, "create product body": resp.Body, "err": err}).Error("Channel api create product error")
+		return err
+	}
+
+	return nil
 }

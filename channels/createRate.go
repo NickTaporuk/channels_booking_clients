@@ -1,70 +1,47 @@
 package channels
 
 import (
-	"fmt"
-	"time"
+	"context"
+	"encoding/json"
 
 	"bitbucket.org/redeam/integration-channel/swclient"
 	"github.com/brianvoe/gofakeit"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
+	"syreclabs.com/go/faker"
 )
 
-func (ch *ChannelsClient) CreateRate() (*swclient.RequestPostRateEnvelope, error) {
+func (ch *ChannelsClient) CreateRate(data *[]byte, ctx *context.Context) error {
 	var (
-		rate     swclient.RequestPostRateEnvelope
-		rateName string
+		err  error
+		rate swclient.RequestPostRateEnvelope
+		//rateName string
 	)
 
-	rateName = fmt.Sprintf(`Test-%s`, ch.ProductID())
-	t := time.Now()
-	tClose := time.Now().AddDate(1, 1, 1)
-
-	rate = swclient.RequestPostRateEnvelope{
-		Rate: &swclient.RequestPostRateEnvelopeRate{
-			Cancelable:     true,
-			Code:           rateName,
-			Cutoff:         1,
-			Holdable:       true,
-			HoldablePeriod: 864000,
-			Hours: []swclient.RequestPostProductEnvelopeProductHours{
-				{
-					DaysOfWeek: []int32{
-						1, 2, 3, 4, 5, 6, 7,
-					},
-					Times: []swclient.RequestPostProductEnvelopeProductTimes{
-						{
-							Close: "17:59",
-							Open:  "17:58",
-						},
-					},
-					Valid: &swclient.RequestPostProductEnvelopeProductValid{
-						From:  t,
-						Until: tClose,
-					},
-				},
-			},
-			Id:           uuid.New().String(),
-			MaxTravelers: 3,
-			MinTravelers: 1,
-			Name:         rateName,
-			Prices: []swclient.RequestPostRateEnvelopeRatePrices{
-				ch.GenPrice(),
-				ch.GenPrice(),
-			},
-			ProductId: ch.ProductID(),
-			Title:     gofakeit.Quote(),
-			Valid: &swclient.RequestPostRateEnvelopeRateValid{
-				From:  t,
-				Until: tClose,
-			},
-			Type_: "RESERVED",
-		},
-		Meta: &swclient.RequestPostCreateChannelEnvelopeMeta{
-			ReqId: uuid.New().String(),
-		},
+	if err = json.Unmarshal(*data, &rate); err != nil {
+		return err
 	}
 
-	return &rate, nil
+	rate.Meta = &swclient.RequestPostCreateChannelEnvelopeMeta{ReqId: uuid.New().String()}
+
+	rate.Rate.Code = faker.App().Author() + faker.App().Name()
+	rate.Rate.Id = uuid.New().String()
+	rate.Rate.ProductId = ch.productID
+	rate.Rate.Prices = []swclient.RequestPostRateEnvelopeRatePrices{
+		ch.GenPrice(),
+	}
+	ch.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from rate json file")
+	ch.logger.Logger().WithFields(logrus.Fields{"Rate": rate,}).Debug("rate debug")
+
+	ResponsePostRateEnvelope, resp, err := ch.Client.RatesApi.CreateRate(*ctx, ch.supplierID, ch.productID, rate)
+
+	ch.logger.Logger().WithFields(logrus.Fields{"ResponsePostRateEnvelope": ResponsePostRateEnvelope, "create rate response resp statusCode": resp.StatusCode, "err": err}).Debug("response post rate envelope")
+
+	if err != nil {
+		ch.logger.Logger().WithFields(logrus.Fields{"ResponsePostRateEnvelope": ResponsePostRateEnvelope, "response resp statusCode": resp.StatusCode, "create rate body": resp.Body, "err": err}).Error("Channel api create rate error")
+		return err
+	}
+	return nil
 }
 
 func (ch *ChannelsClient) GenPrice() swclient.RequestPostRateEnvelopeRatePrices {

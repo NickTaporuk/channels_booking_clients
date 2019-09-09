@@ -16,6 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	"context"
+	"os"
+
+	"github.com/NickTaporuk/channels_booking_clients/channels"
 	"github.com/NickTaporuk/channels_booking_clients/config"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
 	"github.com/sirupsen/logrus"
@@ -25,10 +29,10 @@ import (
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	var (
-		//channelsApiHeaders = make(map[string]string)
-		//channelsClient     *channels.ChannelsClient
+		channelsApiHeaders = make(map[string]string)
+		channelsClient     *channels.ChannelsClient
 		//bookingClient      *booking.BookingClient
-		//ctx                = context.Background()
+		ctx = context.Background()
 		//getSupplier        swclient.ResponseGetSupplierEnvelope
 		//channelBinding     *swclient.RequestPostCreateChannelEnvelope
 		//respChan           swclient.ResponsePostChannelRatesEnvelope
@@ -49,11 +53,14 @@ func Execute() {
 
 	cfg, err = config.NewConfig()
 	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"cfg": cfg, "error": "configuration initialization is failed"}).Error(err)
+
 		panic(err)
 	}
 
-
 	if cfg.Logger.Level == "" {
+		lgr.Logger().WithFields(logrus.Fields{"logger level": cfg.Logger.Level, "error": "logger level is empty"}).Error(err)
+
 		panic(err)
 	}
 
@@ -64,7 +71,41 @@ func Execute() {
 		panic(err)
 	}
 
-		lgr.Logger().WithFields(logrus.Fields{"config": cfg}).Debug("Debug configuration")
+	lgr.Logger().WithFields(logrus.Fields{"config": cfg}).Debug("Debug configuration")
+
+	channelsClient, err = channels.NewChannelClient(channelsApiHeaders)
+	if err != nil {
+		panic(err)
+	}
+	channelsClient.SetLogger(lgr)
+
+	supplier := NewSupplierRepository(channelsClient, &ctx, lgr, cfg)
+	err = supplier.Execute()
+
+	if supplier.Name() == cfg.StopAfterEntity {
+		lgr.Logger().WithFields(logrus.Fields{"supplier": supplier, "error": err}).Error(err)
+		os.Exit(0)
+	}
+
+	product := NewProductRepository(channelsClient, &ctx, lgr, cfg)
+	err = product.Execute()
+	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"product": product, "error": err}).Error(err)
+	}
+
+	if product.Name() == cfg.StopAfterEntity {
+		os.Exit(0)
+	}
+
+	rate := NewRateRepository(channelsClient, &ctx, lgr, cfg)
+	err = rate.Execute()
+	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)
+	}
+
+	if rate.Name() == cfg.StopAfterEntity {
+		os.Exit(0)
+	}
 }
 
 //func init() {
@@ -82,11 +123,11 @@ func Execute() {
 //		panic(err)
 //	}
 //	//
-//	channelsClient, err = channels.NewChannelClient(channelsApiHeaders)
+//channelsClient, err = channels.NewChannelClient(channelsApiHeaders)
 //
-//	if err != nil {
-//		panic(err)
-//	}
+//if err != nil {
+//panic(err)
+//}
 //
 //	channelsClient.SetLogger(lgr)
 //

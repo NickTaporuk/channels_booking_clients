@@ -5,9 +5,7 @@ import (
 
 	"net/http"
 
-	bookingCl "bitbucket.org/redeam/integration-booking/swclient"
 	"bitbucket.org/redeam/integration-channel/swclient"
-	"github.com/NickTaporuk/channels_booking_clients/booking"
 	"github.com/NickTaporuk/channels_booking_clients/channels"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
 	"github.com/sirupsen/logrus"
@@ -18,20 +16,20 @@ func Run() {
 	var (
 		channelsApiHeaders = make(map[string]string)
 		channelsClient     *channels.ChannelsClient
-		bookingClient      *booking.BookingClient
+		//bookingClient      *booking.BookingClient
 		ctx                = context.Background()
 		getSupplier        swclient.ResponseGetSupplierEnvelope
-		channelBinding     *swclient.RequestPostCreateChannelEnvelope
-		respChan           swclient.ResponsePostChannelRatesEnvelope
-		respHold           bookingCl.ResponsePostHoldEnvelope
+		//channelBinding     *swclient.RequestPostCreateChannelEnvelope
+		//respChan           swclient.ResponsePostChannelRatesEnvelope
+		//respHold           bookingCl.ResponsePostHoldEnvelope
 		resp               *http.Response
 		err                error
-		rates              []string
-		prices             []string
+		//rates              []string
+		//prices             []string
 		data               = make(map[string]string)
 		lgr                *logger.LocalLogger
-		book               *bookingCl.RequestPostBookingEnvelope
-		respBooking        bookingCl.ResponsePostBookingEnvelope
+		//book               *bookingCl.RequestPostBookingEnvelope
+		//respBooking        bookingCl.ResponsePostBookingEnvelope
 	)
 
 	data["level"] = "debug"
@@ -61,7 +59,7 @@ func Run() {
 	channelsClient.SetSupplierID(getSupplier.Supplier.Id)
 	lgr.Logger().Println("<==============================================================================================================================================================>")
 
-	product, err := channelsClient.CreateProduct()
+	/*product, err := channelsClient.CreateProduct()
 
 	respProd, resp, err := channelsClient.Client.ProductsApi.CreateProduct(ctx, channels.SupplierID, *product)
 	if err != nil {
@@ -132,7 +130,7 @@ func Run() {
 		lgr.Logger().WithFields(logrus.Fields{"request": hold, "resp body": resp.Body}).Fatal(err)
 	}
 	lgr.Logger().WithField("Hold", "done").WithFields(logrus.Fields{"Hold response": respHold, "request": hold}).Info("Hold creation was done")
-	lgr.Logger().Println("<==============================================================================================================================================================>")
+	lgr.Logger().Println("<==============================================================================================================================================================>")*/
 }
 
 //func main() {

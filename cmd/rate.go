@@ -14,38 +14,104 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 package cmd
-/*
-import (
-	"fmt"
 
-	"github.com/spf13/cobra"
+import (
+	"context"
+	"errors"
+	"github.com/NickTaporuk/channels_booking_clients/channels"
+	"github.com/NickTaporuk/channels_booking_clients/config"
+	"github.com/NickTaporuk/channels_booking_clients/logger"
+	"github.com/NickTaporuk/channels_booking_clients/utils"
+	"github.com/sirupsen/logrus"
+	"io/ioutil"
 )
 
-// rateCmd represents the rate command
-var rateCmd = &cobra.Command{
-	Use:   "rate",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+const (
+	RateCommandName = "supplier"
+)
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("rate called")
-	},
+var (
+	ErrorRateFileIsNotFound = errors.New("file is not found by path")
+)
+
+// RateRepository
+type RateRepository struct {
+	client        *channels.ChannelsClient
+	ctx           *context.Context
+	logger        *logger.LocalLogger
+	configuration *config.Configuration
+	name          string
 }
 
-func init() {
-	rootCmd.AddCommand(rateCmd)
+func NewRateRepository(client *channels.ChannelsClient, ctx *context.Context, logger *logger.LocalLogger, configuration *config.Configuration) *RateRepository {
+	return &RateRepository{client: client, ctx: ctx, logger: logger, configuration: configuration}
+}
 
-	// Here you will define your flags and configuration settings.
+func (s *RateRepository) Name() string {
+	return RateCommandName
+}
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// rateCmd.PersistentFlags().String("foo", "", "A help for foo")
+func (s *RateRepository) Configuration() *config.Configuration {
+	return s.configuration
+}
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// rateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}*/
+func (s *RateRepository) SetConfiguration(configuration *config.Configuration) {
+	s.configuration = configuration
+}
+
+func (s *RateRepository) Logger() *logger.LocalLogger {
+	return s.logger
+}
+
+func (s *RateRepository) SetLogger(logger *logger.LocalLogger) {
+	s.logger = logger
+}
+
+func (s *RateRepository) Ctx() *context.Context {
+	return s.ctx
+}
+
+func (s *RateRepository) SetCtx(ctx *context.Context) {
+	s.ctx = ctx
+}
+
+func (s *RateRepository) Client() *channels.ChannelsClient {
+	return s.client
+}
+
+func (s *RateRepository) SetClient(client *channels.ChannelsClient) {
+	s.client = client
+}
+
+// Execute represents the supplier command
+func (s *RateRepository) Execute() error {
+	var (
+		err error
+	)
+
+	if s.configuration.Rate.ID != "" {
+		if err = utils.CheckIsUUIDTypeOfFlagValue(s.configuration.Rate.ID); err == nil {
+			//if err = utils.CheckRateExist(s.configuration.Rate.ID, s.client, s.ctx, s.logger); err != nil {
+			//	s.logger.Logger().WithFields(logrus.Fields{"supplier": s, "error": err}).Error(err)
+			//	return err
+			//}
+		}
+	} else if s.configuration.Rate.Path != "" {
+		err = utils.CheckIsPathTypeOfFlagValue(s.configuration.Rate.Path)
+		if err == nil {
+
+			data, err := ioutil.ReadFile(s.configuration.Rate.Path)
+			if err != nil {
+				s.logger.Logger().WithField("Rate", "error").WithFields(logrus.Fields{"error": ErrorRateFileIsNotFound, "data": data}).Error(err)
+				return err
+			}
+
+			err = s.client.CreateRate(&data, s.Ctx())
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return err
+}
