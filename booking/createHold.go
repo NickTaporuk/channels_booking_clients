@@ -34,11 +34,12 @@ func (b *BookingClient) CreateHold(rateID, supplierID, priceID string) (swclient
 		Hold: &swclient.RequestPostHoldEnvelopeHold{
 			Expires: expires,
 			Id:      uuid.New().String(),
+			Ext:&ext,
+
 			Items: []swclient.RequestPostHoldEnvelopeHoldItems{
 				{
 					At:             at,
 					AvailabilityId: uuid.New().String(),
-					Ext:            &ext,
 					Quantity:       1,
 					RateId:         rateID,
 					SupplierId:     supplierID,

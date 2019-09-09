@@ -2,6 +2,7 @@ package booking
 
 import (
 	"bitbucket.org/redeam/integration-booking/swclient"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -11,7 +12,24 @@ const (
 )
 
 type BookingClient struct {
-	Client     *swclient.APIClient
+	client *swclient.APIClient
+	logger *logrus.Logger
+}
+
+func (b *BookingClient) Client() *swclient.APIClient {
+	return b.client
+}
+
+func (b *BookingClient) SetClient(client *swclient.APIClient) {
+	b.client = client
+}
+
+func (b *BookingClient) Logger() *logrus.Logger {
+	return b.logger
+}
+
+func (b *BookingClient) SetLogger(logger *logrus.Logger) {
+	b.logger = logger
 }
 
 func NewBookingClient(headers map[string]string) (*BookingClient, error) {
@@ -28,5 +46,5 @@ func NewBookingClient(headers map[string]string) (*BookingClient, error) {
 
 	client = swclient.NewAPIClient(cnf)
 
-	return &BookingClient{Client: client}, nil
+	return &BookingClient{client: client}, nil
 }

@@ -1,0 +1,45 @@
+{
+  "product": {
+    "code": "e1f9be39-0a79-4c17-b75b-49735c39d6ce",
+    "description": "Nick Kuropatkin Test Product decription 3",
+    "hours": [
+      {
+        "dates": [],
+        "daysOfWeek": [
+          1,
+          2,
+          4
+        ],
+        "times": [
+          {
+            "close": "12:30",
+            "open": "08:00"
+          }
+        ],
+        "valid": {
+          "from": "2019-08-02T19:34:49Z",
+          "until": "2020-12-02T19:34:49Z"
+        }
+      }
+    ],
+    "location": {
+      "address": {
+        "countryCode": "USA",
+        "locality": "City",
+        "postalCode": "postalCode",
+        "region": "Region",
+        "streetAddress": "Street 1"
+      },
+      "longLat": {
+        "latitude": 1,
+        "longitude": 1
+      },
+      "name": "Location A",
+      "notes": "",
+      "utcOffset": "+01:00"
+    },
+    "name": "Nick Kuropatkin Test product 33",
+    "status": "UNKNOWN",
+    "title": "Nick Kuropatkin Test product 23"
+  }
+}

@@ -1,0 +1,23 @@
+{"hold": {
+  "expires": "2020-09-29T15:27:48Z",
+  "id": "f0d9422e-680b-48bf-9bcf-4e2e64471713",
+  "items": [
+    {
+      "at": "2019-08-28T15:27:48Z",
+      "availabilityId": "7d1e8be5-f015-4385-bfc3-9d221a831f98",
+      "ext": {
+        "createdAt": "2019-08-28 15:27:48.266614",
+        "updatedAt": "2019-08-28 15:27:48.266614"
+      },
+      "priceId": "d6dd2464-3c5c-4426-b760-e9085435ae9e",
+      "quantity": 1,
+      "rateId": "418a9bb6-f5eb-4fb3-a73d-68a8804c71d5",
+      "supplierId": "b0105adc-3693-4e42-8905-cbbd97f80bbb",
+      "travelerType": "ADULT"
+    }
+  ]
+},
+  "meta": {
+    "reqId": "bdf5b04d-ec6b-4e3d-8ea6-4a03af38aab1"
+  }
+}

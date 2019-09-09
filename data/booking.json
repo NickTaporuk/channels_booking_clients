@@ -1,0 +1,43 @@
+{
+  "booking": {
+    "customer": {
+      "email": "mykola.kuropatkin@redeam.com",
+      "firstName": "Nick",
+      "lastName": "Kuropatkin",
+      "phone": "073-408-9378"
+    },
+    "ext": {
+      "createdAt":"2019-08-27T17:57:36Z",
+      "updatedAt":"2019-08-27T17:57:36Z"
+    },
+    "id": "5e5d4ea5-8789-4a5b-bc72-aae1cfa3d376",
+    "items": [
+      {
+        "availabilityId": "7b45cdcb-4770-4be3-a56e-fa33e6288669",
+        "ext": {
+          "createdAt":"2019-08-27T17:57:36Z",
+          "updatedAt":"2019-08-27T17:57:36Z"
+        },
+        "priceId": "408c131f-e6a5-4e2e-9dd9-6728135c0c75",
+        "quantity": 1,
+        "rateId": "90a902f7-6e03-4d7a-8b5d-bd7ea92c5798",
+        "startTime": "2019-01-13T17:57:36Z",
+        "status": "STATUS_REDEEMED",
+        "supplierId": "b0105adc-3693-4e42-8905-cbbd97f80bbb",
+        "traveler": {
+          "age": 32,
+          "country": "UKR",
+          "email": "mykola.kuropatkin@redeam.com",
+          "firstName": "Nick",
+          "gender": "Male",
+          "isLead": true,
+          "lang": "eng",
+          "lastName": "Kuropatkin",
+          "phone": "AT\u0026T",
+          "type": "ADULT"
+        }
+      }
+    ],
+    "status": "UNKNOWN"
+  }
+}

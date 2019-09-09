@@ -1,5 +1,5 @@
 /*
-Copyright © 2019 NAME HERE <EMAIL ADDRESS>
+Copyright © 2019 Nick Kuropatkin nictaporuk@gmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 package cmd
-
+/*
 import (
 	"fmt"
 
@@ -32,10 +32,10 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(args)
+		fmt.Println("PRODUCT ARGS:", args)
 	},
 }
 
 func init() {
 	supplierCmd.AddCommand(productCmd)
-}
+}*/

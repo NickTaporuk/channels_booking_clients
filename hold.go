@@ -119,7 +119,7 @@ func Run() {
 		lgr.Logger().Fatal(err)
 	}
 
-	respBooking, resp, err = bookingClient.Client.BookingsApi.CreateBooking(ctx, *book)
+	respBooking, resp, err = bookingClient.Client().BookingsApi.CreateBooking(ctx, *book)
 	if err != nil {
 		lgr.Logger().WithFields(logrus.Fields{"booking response": resp.Body, "err": err}).Fatal(err)
 	}
@@ -127,7 +127,7 @@ func Run() {
 	lgr.Logger().Println("<==============================================================================================================================================================>")
 
 	hold, err := bookingClient.CreateHold(rateID, channels.SupplierID, priceID);
-	respHold, resp, err = bookingClient.Client.HoldsApi.CreateHold(ctx, hold)
+	respHold, resp, err = bookingClient.Client().HoldsApi.CreateHold(ctx, hold)
 	if err != nil {
 		lgr.Logger().WithFields(logrus.Fields{"request": hold, "resp body": resp.Body}).Fatal(err)
 	}

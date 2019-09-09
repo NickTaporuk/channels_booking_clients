@@ -2,6 +2,7 @@ package channels
 
 import (
 	"bitbucket.org/redeam/integration-channel/swclient"
+	"github.com/NickTaporuk/channels_booking_clients/logger"
 )
 
 const (
@@ -18,8 +19,17 @@ type (
 		supplierID string
 		rateIDs []string
 		priceIDs []string
+		logger *logger.LocalLogger
 	}
 )
+
+func (ch *ChannelsClient) Logger() *logger.LocalLogger {
+	return ch.logger
+}
+
+func (ch *ChannelsClient) SetLogger(logger *logger.LocalLogger) {
+	ch.logger = logger
+}
 
 func (ch *ChannelsClient) PriceIDs() []string {
 	return ch.priceIDs

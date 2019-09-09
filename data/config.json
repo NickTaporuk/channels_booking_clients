@@ -1,0 +1,37 @@
+{
+  "logger": {
+    "level": "debug"
+  },
+  "bookingEnv": {
+    "XAPIKey": "key-redeam-qa-4f9c3z68",
+    "XAPISecret": "secret-redeam-qa-v8z73c9x"
+  },
+  "channelEnv": {
+    "XAPIKey": "key-redeam-qa-4f9c3z68",
+    "XAPISecret": "secret-redeam-qa-v8z73c9x"
+  },
+  "supplier": {
+    "id": "uuid",
+    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/supplier.json"
+  },
+  "product": {
+    "id": "uuid",
+    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/product.json"
+  },
+  "rate": {
+    "id": "uuid",
+    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/rate.json"
+  },
+  "channelBinding": {
+    "id": "uuid",
+    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/channelBinding.json"
+  },
+  "booking": {
+    "id": "uuid",
+    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/booking.json"
+  },
+  "hold": {
+    "id": "uuid",
+    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/hold.json"
+  }
+}
