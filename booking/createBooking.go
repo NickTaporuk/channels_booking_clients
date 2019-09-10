@@ -13,7 +13,6 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 	var (
 		err     error
 		booking swclient.RequestPostBookingEnvelope
-		items   []swclient.RequestPostBookingEnvelopeBookingItems
 	)
 
 	if err = json.Unmarshal(*data, &booking); err != nil {
@@ -22,9 +21,7 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 
 	booking.Meta = &swclient.RequestPostBookingEnvelopeMeta{ReqId: uuid.New().String()}
 	booking.Booking.Id = uuid.New().String()
-	items = b.GenerateBookingItems(priceID, rateID, supplierID)
-
-	booking.Booking.Items = items
+	b.UpdateBookingItems(priceID, rateID, supplierID, booking.Booking.Items)
 
 	b.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from supplier json file")
 	b.logger.Logger().WithFields(logrus.Fields{"Supplier": booking,}).Debug(booking)
@@ -41,17 +38,15 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 	return nil
 }
 
-func (b *BookingClient) GenerateBookingItems(priceID, rateID, supplierID string) ([]swclient.RequestPostBookingEnvelopeBookingItems) {
+func (b *BookingClient) UpdateBookingItems(priceID, rateID, supplierID string, items []swclient.RequestPostBookingEnvelopeBookingItems) {
 	var (
-		item  = new(swclient.RequestPostBookingEnvelopeBookingItems)
-		items []swclient.RequestPostBookingEnvelopeBookingItems
+		item swclient.RequestPostBookingEnvelopeBookingItems
 	)
 
-	item.PriceId = priceID
-	item.SupplierId = supplierID
-	item.RateId = rateID
-	item.AvailabilityId = uuid.New().String()
-	items = append(items, *item)
-
-	return items
+	for _, item = range items {
+		item.PriceId = priceID
+		item.SupplierId = supplierID
+		item.RateId = rateID
+		item.AvailabilityId = uuid.New().String()
+	}
 }
