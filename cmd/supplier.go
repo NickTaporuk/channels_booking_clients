@@ -41,7 +41,6 @@ type SupplierRepository struct {
 	ctx           *context.Context
 	logger        *logger.LocalLogger
 	configuration *config.Configuration
-	name          string
 }
 
 func NewSupplierRepository(client *channels.ChannelsClient, ctx *context.Context, logger *logger.LocalLogger, configuration *config.Configuration) *SupplierRepository {

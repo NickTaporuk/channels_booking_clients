@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// NewConfig is constructor of the Configuration struct
 func NewConfig() (*Configuration, error) {
 	var (
 		err            error

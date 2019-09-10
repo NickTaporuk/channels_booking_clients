@@ -41,7 +41,6 @@ type RateRepository struct {
 	ctx           *context.Context
 	logger        *logger.LocalLogger
 	configuration *config.Configuration
-	name          string
 }
 
 func NewRateRepository(client *channels.ChannelsClient, ctx *context.Context, logger *logger.LocalLogger, configuration *config.Configuration) *RateRepository {

@@ -15,7 +15,7 @@ func (ch *ChannelsClient) CreateChannelBinding(data *[]byte, ctx *context.Contex
 		channelBinding = new(swclient.RequestPostCreateChannelEnvelope)
 	)
 
-	if err = json.Unmarshal([]byte(*data), &channelBinding); err != nil {
+	if err = json.Unmarshal(*data, &channelBinding); err != nil {
 		return err
 	}
 

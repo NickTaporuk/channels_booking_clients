@@ -41,7 +41,6 @@ type ChannelBindingRepository struct {
 	ctx           *context.Context
 	logger        *logger.LocalLogger
 	configuration *config.Configuration
-	name          string
 }
 
 func NewChannelBindingRepository(client *channels.ChannelsClient, ctx *context.Context, logger *logger.LocalLogger, configuration *config.Configuration) *ChannelBindingRepository {

@@ -17,7 +17,7 @@ func (ch *ChannelsClient) CreateProduct(data *[]byte, ctx *context.Context) erro
 		err     error
 	)
 
-	if err = json.Unmarshal([]byte(*data), &product); err != nil {
+	if err = json.Unmarshal(*data, &product); err != nil {
 		return err
 	}
 
