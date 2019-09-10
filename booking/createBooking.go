@@ -12,7 +12,7 @@ import (
 func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *[]byte, ctx *context.Context) error {
 	var (
 		err     error
-		booking swclient.RequestPostBookingEnvelope
+		booking = new(swclient.RequestPostBookingEnvelope)
 	)
 
 	if err = json.Unmarshal(*data, &booking); err != nil {
@@ -21,12 +21,18 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 
 	booking.Meta = &swclient.RequestPostBookingEnvelopeMeta{ReqId: uuid.New().String()}
 	booking.Booking.Id = uuid.New().String()
-	b.UpdateBookingItems(priceID, rateID, supplierID, booking.Booking.Items)
+
+	for i, _ := range booking.Booking.Items {
+		booking.Booking.Items[i].PriceId = priceID
+		booking.Booking.Items[i].SupplierId = supplierID
+		booking.Booking.Items[i].RateId = rateID
+		booking.Booking.Items[i].AvailabilityId = uuid.New().String()
+	}
 
 	b.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from supplier json file")
-	b.logger.Logger().WithFields(logrus.Fields{"Supplier": booking,}).Debug(booking)
+	b.logger.Logger().WithFields(logrus.Fields{"Booking": booking,}).Debug(booking)
 
-	ResponsePostBookingEnvelope, resp, err := b.Client().BookingsApi.CreateBooking(*ctx, booking)
+	ResponsePostBookingEnvelope, resp, err := b.Client().BookingsApi.CreateBooking(*ctx, *booking)
 
 	b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "create Booking response resp statusCode": resp.StatusCode, "err": err}).Debug("ResponsePostBookingEnvelope")
 
@@ -36,17 +42,4 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 	}
 
 	return nil
-}
-
-func (b *BookingClient) UpdateBookingItems(priceID, rateID, supplierID string, items []swclient.RequestPostBookingEnvelopeBookingItems) {
-	var (
-		item swclient.RequestPostBookingEnvelopeBookingItems
-	)
-
-	for _, item = range items {
-		item.PriceId = priceID
-		item.SupplierId = supplierID
-		item.RateId = rateID
-		item.AvailabilityId = uuid.New().String()
-	}
 }

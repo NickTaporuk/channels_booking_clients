@@ -65,6 +65,11 @@ func Execute() {
 
 	lgr.Logger().WithFields(logrus.Fields{"config": cfg}).Debug("Debug configuration")
 
+	err = ValidateStopAfterEntity(cfg.StopAfterEntity)
+	if err != nil {
+		panic(err)
+	}
+
 	channelsClient, err = channels.NewChannelClient(cfg.ChannelEnv.XAPIKey, cfg.ChannelEnv.XAPISecret)
 	if err != nil {
 		panic(err)
@@ -114,7 +119,7 @@ func Execute() {
 	channelBinding := NewChannelBindingRepository(channelsClient, &ctx, lgr, cfg)
 	err = channelBinding.Execute()
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)
+		lgr.Logger().WithFields(logrus.Fields{"channelBinding": channelBinding, "error": err}).Error(err)
 		panic(err)
 	}
 
@@ -126,12 +131,13 @@ func Execute() {
 	if err != nil {
 		lgr.Logger().WithFields(logrus.Fields{"request": channelBinding}).Fatal("Booking client is not initialized")
 	}
+
 	bookingClient.SetLogger(lgr)
 
 	booking := NewBookingRepository(bookingClient, channelsClient, &ctx, lgr, cfg)
 	err = booking.Execute()
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)
+		lgr.Logger().WithFields(logrus.Fields{"booking": booking, "error": err}).Error(err)
 		panic(err)
 	}
 
@@ -139,4 +145,15 @@ func Execute() {
 		os.Exit(0)
 	}
 
+	hold := NewHoldRepository(bookingClient, channelsClient, &ctx, lgr, cfg)
+
+	err = hold.Execute()
+	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"hold": hold, "error": err}).Error(err)
+		panic(err)
+	}
+
+	if hold.Name() == cfg.StopAfterEntity {
+		os.Exit(0)
+	}
 }

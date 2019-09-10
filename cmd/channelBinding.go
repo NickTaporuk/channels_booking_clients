@@ -32,7 +32,7 @@ const (
 )
 
 var (
-	ErrorChannelBindingFileIsNotFound = errors.New("file is not found by path")
+	ErrorChannelBindingFileIsNotFound = errors.New("channelBinding.json file was not found by path")
 )
 
 // ChannelBindingRepository

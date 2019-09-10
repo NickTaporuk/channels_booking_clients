@@ -16,22 +16,116 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"context"
+	"errors"
+	"github.com/NickTaporuk/channels_booking_clients/channels"
+	"io/ioutil"
 
-	"github.com/spf13/cobra"
+	"github.com/NickTaporuk/channels_booking_clients/booking"
+	"github.com/NickTaporuk/channels_booking_clients/config"
+	"github.com/NickTaporuk/channels_booking_clients/logger"
+	"github.com/NickTaporuk/channels_booking_clients/utils"
+	"github.com/sirupsen/logrus"
 )
 
-// holdCmd represents the hold command
-var holdCmd = &cobra.Command{
-	Use:   "hold",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+const (
+	HoldCommandName = "hold"
+)
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("hold called")
-	},
+var (
+	ErrorHoldFileIsNotFound = errors.New("hold.json file was not found by path")
+)
+
+// HoldRepository
+type HoldRepository struct {
+	client        *booking.BookingClient
+	channelClient *channels.ChannelsClient
+	ctx           *context.Context
+	logger        *logger.LocalLogger
+	configuration *config.Configuration
+}
+
+func NewHoldRepository(client *booking.BookingClient, channelClient *channels.ChannelsClient, ctx *context.Context, logger *logger.LocalLogger, configuration *config.Configuration) *HoldRepository {
+	return &HoldRepository{client: client, channelClient: channelClient, ctx: ctx, logger: logger, configuration: configuration}
+}
+
+func (s *HoldRepository) ChannelsClient() *channels.ChannelsClient {
+	return s.channelClient
+}
+
+func (s *HoldRepository) SetChannelsClient(channelClient *channels.ChannelsClient) {
+	s.channelClient = channelClient
+}
+
+func (s *HoldRepository) Name() string {
+	return HoldCommandName
+}
+
+func (s *HoldRepository) Configuration() *config.Configuration {
+	return s.configuration
+}
+
+func (s *HoldRepository) SetConfiguration(configuration *config.Configuration) {
+	s.configuration = configuration
+}
+
+func (s *HoldRepository) Logger() *logger.LocalLogger {
+	return s.logger
+}
+
+func (s *HoldRepository) SetLogger(logger *logger.LocalLogger) {
+	s.logger = logger
+}
+
+func (s *HoldRepository) Ctx() *context.Context {
+	return s.ctx
+}
+
+func (s *HoldRepository) SetCtx(ctx *context.Context) {
+	s.ctx = ctx
+}
+
+func (s *HoldRepository) Client() *booking.BookingClient {
+	return s.client
+}
+
+func (s *HoldRepository) SetClient(client *booking.BookingClient) {
+	s.client = client
+}
+
+// Execute represents the supplier command
+func (s *HoldRepository) Execute() error {
+	var (
+		err error
+	)
+
+	if s.configuration.Hold.ID != "" {
+		if err = utils.CheckIsUUIDTypeOfFlagValue(s.configuration.Hold.ID); err == nil {
+			if err = utils.CheckHoldExist(s.configuration.Hold.ID, s.client, s.ctx, s.logger); err != nil {
+				s.logger.Logger().WithFields(logrus.Fields{"hold": s, "error": err}).Error(err)
+				return err
+			}
+		}
+	} else if s.configuration.Hold.Path != "" {
+		err = utils.CheckIsPathTypeOfFlagValue(s.configuration.Hold.Path)
+		if err == nil {
+
+			data, err := ioutil.ReadFile(s.configuration.Hold.Path)
+			if err != nil {
+				s.logger.Logger().WithField("Hold", "error").WithFields(logrus.Fields{"error": ErrorHoldFileIsNotFound,}).Error(err)
+				return err
+			}
+
+			priceID := s.channelClient.PriceIDs()[0]
+			rateID := s.channelClient.RateIDs()[0]
+			supplierID := s.channelClient.SupplierID()
+
+			err = s.client.CreateHold(rateID, supplierID, priceID, &data, s.Ctx())
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return err
 }

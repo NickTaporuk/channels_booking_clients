@@ -32,8 +32,8 @@
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/booking.json"
   },
   "hold": {
-    "id": "uuid",
+    "id": "",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/hold.json"
   },
-  "stopAfterEntity": "ChannelBinding"
+  "stopAfterEntity": "booking"
 }

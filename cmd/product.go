@@ -32,7 +32,7 @@ const (
 )
 
 var (
-	ErrorProductFileIsNotFound = errors.New("file is not found by path")
+	ErrorProductFileIsNotFound = errors.New("product.json file was not found by path")
 )
 
 // ProductRepository
@@ -41,7 +41,6 @@ type ProductRepository struct {
 	ctx           *context.Context
 	logger        *logger.LocalLogger
 	configuration *config.Configuration
-	name          string
 }
 
 func NewProductRepository(client *channels.ChannelsClient, ctx *context.Context, logger *logger.LocalLogger, configuration *config.Configuration) *ProductRepository {

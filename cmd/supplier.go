@@ -32,7 +32,7 @@ const (
 )
 
 var (
-	ErrorSupplierFileIsNotFound = errors.New("file is not found by path")
+	ErrorSupplierFileIsNotFound = errors.New("supplier.json file was not found by path")
 )
 
 // SupplierRepository

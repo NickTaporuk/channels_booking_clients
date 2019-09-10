@@ -16,9 +16,9 @@ import (
 )
 
 var (
-	ErrorSupplierIsNotFound = errors.New("supplier isn't found")
-	ErrorProductIsNotFound  = errors.New("product isn't found")
-	ErrorRateIsNotFound     = errors.New("rate isn't found")
+	ErrorSupplierIsNotFound       = errors.New("supplier isn't found")
+	ErrorProductIsNotFound        = errors.New("product isn't found")
+	ErrorRateIsNotFound           = errors.New("rate isn't found")
 )
 
 // CheckIsUUIDTypeOfSupplierFlagValue is used to check value is uuid type
@@ -167,6 +167,33 @@ func CheckBookingExist(bookingID string, bookingClient *booking.BookingClient, c
 	}
 
 	lgr.Logger().WithField("Booking", "found").WithFields(logrus.Fields{"booking": booking, "response status": resp.StatusCode}).Debug("booking was found")
+
+	return nil
+}
+
+// CheckHoldExist is used to check exist supplier by uuid
+func CheckHoldExist(holdID string, bookingClient *booking.BookingClient, ctx *context.Context, lgr *logger.LocalLogger) error {
+	var (
+		hold bc.ResponseGetHoldEnvelope
+		resp *http.Response
+		err  error
+	)
+
+	hold, resp, err = bookingClient.Client().HoldsApi.GetHold(*ctx, holdID)
+	if err != nil {
+		lgr.Logger().WithField("Booking", "not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
+
+		return err
+	}
+
+	if hold.Hold == nil || hold.Hold.Id == "" {
+		err = ErrorRateIsNotFound
+		lgr.Logger().WithField("Hold", "not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
+
+		return err
+	}
+
+	lgr.Logger().WithField("Hold", "found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode}).Debug("hold was found")
 
 	return nil
 }

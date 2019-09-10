@@ -32,7 +32,7 @@ const (
 )
 
 var (
-	ErrorRateFileIsNotFound = errors.New("file is not found by path")
+	ErrorRateFileIsNotFound = errors.New("rate.json file was not found by path")
 )
 
 // RateRepository

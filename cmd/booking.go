@@ -33,7 +33,7 @@ const (
 )
 
 var (
-	ErrorBookingFileIsNotFound = errors.New("file is not found by path")
+	ErrorBookingFileIsNotFound = errors.New("booking.json file was not found by path")
 )
 
 // BookingRepository
