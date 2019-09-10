@@ -17,6 +17,8 @@ package cmd
 
 import (
 	"context"
+	"github.com/NickTaporuk/channels_booking_clients/booking"
+	"github.com/NickTaporuk/channels_booking_clients/utils"
 	"os"
 
 	"github.com/NickTaporuk/channels_booking_clients/channels"
@@ -29,23 +31,13 @@ import (
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	var (
-		channelsApiHeaders = make(map[string]string)
-		channelsClient     *channels.ChannelsClient
-		//bookingClient      *booking.BookingClient
-		ctx = context.Background()
-		//getSupplier        swclient.ResponseGetSupplierEnvelope
-		//channelBinding     *swclient.RequestPostCreateChannelEnvelope
-		//respChan           swclient.ResponsePostChannelRatesEnvelope
-		//respHold           bookingCl.ResponsePostHoldEnvelope
-		//resp               *http.Response
-		err error
-		//rates              []string
-		//prices             []string
+		channelsClient *channels.ChannelsClient
+		bookingClient      *booking.BookingClient
+		ctx  = context.Background()
+		err  error
 		data = make(map[string]string)
 		lgr  *logger.LocalLogger
-		//book               *bookingCl.RequestPostBookingEnvelope
-		//respBooking        bookingCl.ResponsePostBookingEnvelope
-		cfg *config.Configuration
+		cfg  *config.Configuration
 	)
 
 	lgr = &logger.LocalLogger{}
@@ -73,14 +65,24 @@ func Execute() {
 
 	lgr.Logger().WithFields(logrus.Fields{"config": cfg}).Debug("Debug configuration")
 
-	channelsClient, err = channels.NewChannelClient(channelsApiHeaders)
+	channelsClient, err = channels.NewChannelClient(cfg.ChannelEnv.XAPIKey, cfg.ChannelEnv.XAPISecret)
 	if err != nil {
 		panic(err)
 	}
 	channelsClient.SetLogger(lgr)
 
+	if err = utils.CheckIsUUIDTypeOfFlagValue(cfg.ChannelID); err != nil {
+		panic(err)
+	} else {
+		channelsClient.SetChannelID(cfg.ChannelID)
+	}
+
 	supplier := NewSupplierRepository(channelsClient, &ctx, lgr, cfg)
 	err = supplier.Execute()
+	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"supplier": supplier, "error": err}).Error(err)
+		panic(err)
+	}
 
 	if supplier.Name() == cfg.StopAfterEntity {
 		lgr.Logger().WithFields(logrus.Fields{"supplier": supplier, "error": err}).Error(err)
@@ -91,6 +93,7 @@ func Execute() {
 	err = product.Execute()
 	if err != nil {
 		lgr.Logger().WithFields(logrus.Fields{"product": product, "error": err}).Error(err)
+		panic(err)
 	}
 
 	if product.Name() == cfg.StopAfterEntity {
@@ -101,61 +104,39 @@ func Execute() {
 	err = rate.Execute()
 	if err != nil {
 		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)
+		panic(err)
 	}
 
 	if rate.Name() == cfg.StopAfterEntity {
 		os.Exit(0)
 	}
+
+	channelBinding := NewChannelBindingRepository(channelsClient, &ctx, lgr, cfg)
+	err = channelBinding.Execute()
+	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)
+		panic(err)
+	}
+
+	if channelBinding.Name() == cfg.StopAfterEntity {
+		os.Exit(0)
+	}
+
+	bookingClient, err = booking.NewBookingClient(cfg.BookingEnv.XAPIKey, cfg.BookingEnv.XAPISecret)
+	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"request": channelBinding}).Fatal("Booking client is not initialized")
+	}
+	bookingClient.SetLogger(lgr)
+
+	booking := NewBookingRepository(bookingClient,channelsClient, &ctx, lgr, cfg)
+	err = booking.Execute()
+	if err != nil {
+		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)
+		panic(err)
+	}
+
+	if booking.Name() == cfg.StopAfterEntity {
+		os.Exit(0)
+	}
+
 }
-
-//func init() {
-//	cobra.OnInitialize(initConfig)
-//
-//	// TODO: need move to cli parameters
-//	data["level"] = "debug"
-//	lgr = &logger.LocalLogger{}
-//
-//	defer lgr.Close()
-//
-//	err = lgr.Init(data)
-//
-//	if err != nil {
-//		panic(err)
-//	}
-//	//
-//channelsClient, err = channels.NewChannelClient(channelsApiHeaders)
-//
-//if err != nil {
-//panic(err)
-//}
-//
-//	channelsClient.SetLogger(lgr)
-//
-//	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.channels_booking_clients.yaml)")
-//}
-
-//// initConfig reads in config file and ENV variables if set.
-//func initConfig() {
-//	if cfgFile != "" {
-//		// Use config file from the flag.
-//		viper.SetConfigFile(cfgFile)
-//	} else {
-//		// Find home directory.
-//		home, err := homedir.Dir()
-//		if err != nil {
-//			fmt.Println(err)
-//			os.Exit(1)
-//		}
-//
-//		// Search config in home directory with name ".channels_booking_clients" (without extension).
-//		viper.AddConfigPath(home)
-//		viper.SetConfigName(".cbc")
-//	}
-//
-//	viper.AutomaticEnv() // read in environment variables that match
-//
-//	// If a config file is found, read it in.
-//	if err := viper.ReadInConfig(); err == nil {
-//		fmt.Println("Using config file:", viper.ConfigFileUsed())
-//	}
-//}

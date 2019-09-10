@@ -38,6 +38,7 @@ func (ch *ChannelsClient) CreateProduct(data *[]byte, ctx *context.Context) erro
 		ch.logger.Logger().WithFields(logrus.Fields{"ResponsePostProductEnvelope": ResponsePostProductEnvelope, "response resp statusCode": resp.StatusCode, "create product body": resp.Body, "err": err}).Error("Channel api create product error")
 		return err
 	}
+	ch.SetProductID(product.Product.Id)
 
 	return nil
 }

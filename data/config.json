@@ -2,6 +2,7 @@
   "logger": {
     "level": "debug"
   },
+  "channelID": "63bb6368-7cda-4dd2-ba20-68280b4db77e",
   "bookingEnv": {
     "XAPIKey": "key-redeam-qa-4f9c3z68",
     "XAPISecret": "secret-redeam-qa-v8z73c9x"
@@ -11,28 +12,28 @@
     "XAPISecret": "secret-redeam-qa-v8z73c9x"
   },
   "supplier": {
-    "id": "34019e25-c53c-436e-8887-827d3789ddbc",
+    "id": "9b74836e-ab55-42ab-996d-197497b3dee4",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/supplier.json"
   },
   "product": {
-    "id": "7998e353-e0c9-49d5-b5f8-d9cfb81f827b",
+    "id": "",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/product.json"
   },
   "rate": {
-    "id": "1efda848-4cef-4197-97ed-b95fef8fa2b5",
+    "id": "",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/rate.json"
   },
   "channelBinding": {
-    "id": "uuid",
+    "id": "",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/channelBinding.json"
   },
   "booking": {
-    "id": "uuid",
+    "id": "",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/booking.json"
   },
   "hold": {
     "id": "uuid",
     "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/hold.json"
   },
-  "stopAfterEntity": "rate"
+  "stopAfterEntity": "ChannelBinding"
 }

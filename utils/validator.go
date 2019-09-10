@@ -3,9 +3,11 @@ package utils
 import (
 	"context"
 	"errors"
+	"github.com/NickTaporuk/channels_booking_clients/booking"
 	"net/http"
 	"os"
 
+	bc "bitbucket.org/redeam/integration-booking/swclient"
 	"bitbucket.org/redeam/integration-channel/swclient"
 	"github.com/NickTaporuk/channels_booking_clients/channels"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
@@ -86,10 +88,13 @@ func CheckProductExist(supplierID, productID string, channelsClient *channels.Ch
 // CheckRateExist is used to check exist supplier by uuid
 func CheckRateExist(supplierID, productID, rateID string, channelsClient *channels.ChannelsClient, ctx *context.Context, lgr *logger.LocalLogger) error {
 	var (
-		rate swclient.ResponseGetRateEnvelope
-		resp *http.Response
-		err  error
+		rate   swclient.ResponseGetRateEnvelope
+		resp   *http.Response
+		err    error
+		prices []string
+		rates  []string
 	)
+
 	rate, resp, err = channelsClient.Client.RatesApi.GetRate(*ctx, supplierID, productID, rateID)
 	if err != nil {
 		return err
@@ -99,9 +104,69 @@ func CheckRateExist(supplierID, productID, rateID string, channelsClient *channe
 		return ErrorRateIsNotFound
 	}
 
-	lgr.Logger().WithField("Supplier", "found").WithFields(logrus.Fields{"Supplier rate": rate, "response status": resp.StatusCode}).Info("Rate was found")
+	for _, price := range rate.Rate.Prices {
+		prices = append(prices, price.Id)
+	}
 
-	//channelsClient.SetSupplierID(supplier.Supplier.Id)
+	rates = append(rates, rate.Rate.Id)
+
+	channelsClient.SetRateIDs(rates)
+	channelsClient.SetPriceIDs(prices)
+	lgr.Logger().WithField("Rate", "found").WithFields(logrus.Fields{"Rate": rate, "response status": resp.StatusCode}).Info("Rate was found")
+
+	return nil
+}
+
+// CheckRateExist is used to check exist supplier by uuid
+func CheckChannelBindingExist(channelID string, channelsClient *channels.ChannelsClient, ctx *context.Context, lgr *logger.LocalLogger) error {
+	var (
+		channelBinding swclient.ResponseGetChannelEnvelope
+		resp           *http.Response
+		err            error
+	)
+
+	channelBinding, resp, err = channelsClient.Client.ChannelsApi.GetChannel(*ctx, channelID)
+	if err != nil {
+		lgr.Logger().WithField("ChannelBinding", "not found").WithFields(logrus.Fields{"channelBinding": channelBinding, "response status": resp.StatusCode, "error": err}).Error("channelBinding was not found")
+
+		return err
+	}
+
+	if channelBinding.Channel == nil || channelBinding.Channel.Id == "" {
+		err = ErrorRateIsNotFound
+		lgr.Logger().WithField("ChannelBinding", "not found").WithFields(logrus.Fields{"channelBinding": channelBinding, "response status": resp.StatusCode, "error": err}).Error("channelBinding was not found")
+
+		return err
+	}
+
+	lgr.Logger().WithField("ChannelBinding", "found").WithFields(logrus.Fields{"channelBinding": channelBinding, "response status": resp.StatusCode}).Debug("channelBinding was found")
+
+	return nil
+}
+
+// CheckRateExist is used to check exist supplier by uuid
+func CheckBookingExist(bookingID string, bookingClient *booking.BookingClient, ctx *context.Context, lgr *logger.LocalLogger) error {
+	var (
+		booking  bc.ResponseGetBookingEnvelope
+		resp           *http.Response
+		err            error
+	)
+
+	booking, resp, err = bookingClient.Client().BookingsApi.GetBooking(*ctx, bookingID)
+	if err != nil {
+		lgr.Logger().WithField("Booking", "not found").WithFields(logrus.Fields{"booking": booking, "response status": resp.StatusCode, "error": err}).Error("Booking was not found")
+
+		return err
+	}
+
+	if booking.Booking == nil || booking.Booking.Id == "" {
+		err = ErrorRateIsNotFound
+		lgr.Logger().WithField("Booking", "not found").WithFields(logrus.Fields{"booking": booking, "response status": resp.StatusCode, "error": err}).Error("booking was not found")
+
+		return err
+	}
+
+	lgr.Logger().WithField("Booking", "found").WithFields(logrus.Fields{"booking": booking, "response status": resp.StatusCode}).Debug("booking was found")
 
 	return nil
 }

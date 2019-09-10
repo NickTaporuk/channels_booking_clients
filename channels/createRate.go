@@ -13,9 +13,10 @@ import (
 
 func (ch *ChannelsClient) CreateRate(data *[]byte, ctx *context.Context) error {
 	var (
-		err  error
-		rate swclient.RequestPostRateEnvelope
-		//rateName string
+		err    error
+		rate   swclient.RequestPostRateEnvelope
+		prices []string
+		rates  []string
 	)
 
 	if err = json.Unmarshal(*data, &rate); err != nil {
@@ -30,6 +31,7 @@ func (ch *ChannelsClient) CreateRate(data *[]byte, ctx *context.Context) error {
 	rate.Rate.Prices = []swclient.RequestPostRateEnvelopeRatePrices{
 		ch.GenPrice(),
 	}
+
 	ch.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from rate json file")
 	ch.logger.Logger().WithFields(logrus.Fields{"Rate": rate,}).Debug("rate debug")
 
@@ -41,6 +43,16 @@ func (ch *ChannelsClient) CreateRate(data *[]byte, ctx *context.Context) error {
 		ch.logger.Logger().WithFields(logrus.Fields{"ResponsePostRateEnvelope": ResponsePostRateEnvelope, "response resp statusCode": resp.StatusCode, "create rate body": resp.Body, "err": err}).Error("Channel api create rate error")
 		return err
 	}
+
+	for _, price := range rate.Rate.Prices {
+		prices = append(prices, price.Id)
+	}
+
+	rates = append(rates, rate.Rate.Id)
+
+	ch.SetRateIDs(rates)
+	ch.SetPriceIDs(prices)
+
 	return nil
 }
 

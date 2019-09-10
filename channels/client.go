@@ -6,10 +6,10 @@ import (
 )
 
 const (
-	XAPIKey    = "key-redeam-qa-4f9c3z68"
-	XAPISecret = "secret-redeam-qa-v8z73c9x"
-	SupplierID = "b0105adc-3693-4e42-8905-cbbd97f80bbb"
-	ChannelId = "546bd79e-f7fd-48c1-977e-a65ad1b99f88"
+	// HeaderKeyXAPIKey
+	HeaderKeyXAPIKey = "X-API-Key"
+	//
+	HeaderKeyXAPISecret = "X-API-Secret"
 )
 
 type (
@@ -17,11 +17,20 @@ type (
 		Client     *swclient.APIClient
 		productID  string
 		supplierID string
-		rateIDs []string
-		priceIDs []string
-		logger *logger.LocalLogger
+		channelID  string
+		rateIDs    []string
+		priceIDs   []string
+		logger     *logger.LocalLogger
 	}
 )
+
+func (ch *ChannelsClient) ChannelID() string {
+	return ch.channelID
+}
+
+func (ch *ChannelsClient) SetChannelID(channelID string) {
+	ch.channelID = channelID
+}
 
 func (ch *ChannelsClient) Logger() *logger.LocalLogger {
 	return ch.logger
@@ -48,7 +57,7 @@ func (ch *ChannelsClient) RateIDs() []string {
 }
 
 func (ch *ChannelsClient) SetRateID(rateID string) {
-	ch.rateIDs = append(ch.rateIDs,rateID)
+	ch.rateIDs = append(ch.rateIDs, rateID)
 }
 
 func (ch *ChannelsClient) ProductID() string {
@@ -68,13 +77,14 @@ func (ch *ChannelsClient) SetSupplierID(supplierID string) {
 }
 
 // NewChannelClient is constructor for channels api
-func NewChannelClient(headers map[string]string) (*ChannelsClient, error) {
+func NewChannelClient(xAPIKey, xAPISecretKey string) (*ChannelsClient, error) {
 	var (
+		headers  = make(map[string]string)
 		chClient *swclient.APIClient
 	)
 
-	headers["X-API-Key"] = XAPIKey
-	headers["X-API-Secret"] = XAPISecret
+	headers[HeaderKeyXAPIKey] = xAPIKey
+	headers[HeaderKeyXAPISecret] = xAPISecretKey
 
 	cnf := swclient.NewConfiguration()
 	cnf.DefaultHeader = headers

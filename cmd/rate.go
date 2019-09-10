@@ -27,7 +27,7 @@ import (
 )
 
 const (
-	RateCommandName = "supplier"
+	RateCommandName = "rate"
 )
 
 var (
@@ -91,10 +91,10 @@ func (s *RateRepository) Execute() error {
 
 	if s.configuration.Rate.ID != "" {
 		if err = utils.CheckIsUUIDTypeOfFlagValue(s.configuration.Rate.ID); err == nil {
-			//if err = utils.CheckRateExist(s.configuration.Rate.ID, s.client, s.ctx, s.logger); err != nil {
-			//	s.logger.Logger().WithFields(logrus.Fields{"supplier": s, "error": err}).Error(err)
-			//	return err
-			//}
+			if err = utils.CheckRateExist(s.configuration.Supplier.ID, s.configuration.Product.ID, s.configuration.Rate.ID, s.client, s.ctx, s.logger); err != nil {
+				s.logger.Logger().WithFields(logrus.Fields{"rate": s, "error": err}).Error(err)
+				return err
+			}
 		}
 	} else if s.configuration.Rate.Path != "" {
 		err = utils.CheckIsPathTypeOfFlagValue(s.configuration.Rate.Path)

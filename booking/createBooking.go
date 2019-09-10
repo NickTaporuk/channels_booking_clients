@@ -1,72 +1,57 @@
 package booking
 
 import (
-	"time"
+	"context"
+	"encoding/json"
 
 	"bitbucket.org/redeam/integration-booking/swclient"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string) (*swclient.RequestPostBookingEnvelope, error) {
+func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *[]byte, ctx *context.Context) error {
 	var (
-		booking   swclient.RequestPostBookingEnvelope
-		data      = make(map[string]string)
-		t         string
-		startTime time.Time
-		email     = "mykola.kuropatkin@redeam.com"
-		firstName = "Nick"
-		lastName  = "Kuropatkin"
-		phone     = "073-408-9378"
+		err     error
+		booking swclient.RequestPostBookingEnvelope
+		items   []swclient.RequestPostBookingEnvelopeBookingItems
 	)
 
-	t = time.Now().Format("2019-08-27T17:57:36Z")
-	startTime = time.Now()
-
-	data["createdAt"] = t
-	data["updatedAt"] = t
-
-	var ext interface{} = data
-
-	booking = swclient.RequestPostBookingEnvelope{
-		Meta: &swclient.RequestPostBookingEnvelopeMeta{
-			ReqId: uuid.New().String(),
-		},
-		Booking: &swclient.RequestPostBookingEnvelopeBooking{
-			Customer: &swclient.RequestPostBookingEnvelopeBookingCustomer{
-				Email:     email,
-				FirstName: firstName,
-				LastName:  lastName,
-				Phone:     phone,
-			},
-			Ext: &ext,
-			Id:  uuid.New().String(),
-			Items: []swclient.RequestPostBookingEnvelopeBookingItems{
-				{
-					AvailabilityId: uuid.New().String(),
-					Ext:            &ext,
-					PriceId:        priceID,
-					Quantity:       1,
-					RateId:         rateID,
-					StartTime:      startTime,
-					SupplierId:     supplierID,
-					Status:         "STATUS_REDEEMED",
-					Traveler: &swclient.RequestPostBookingEnvelopeBookingTraveler{
-						Age:       32,
-						Country:   "UKR",
-						Email:     email,
-						FirstName: firstName,
-						LastName:  lastName,
-						Phone:     phone,
-						Type_:     "ADULT",
-						Gender:    "Male",
-						IsLead:    true,
-						Lang:      "eng",
-					},
-				},
-			},
-			Status: "UNKNOWN",
-		},
+	if err = json.Unmarshal(*data, &booking); err != nil {
+		return err
 	}
 
-	return &booking, nil
+	booking.Meta = &swclient.RequestPostBookingEnvelopeMeta{ReqId: uuid.New().String()}
+	booking.Booking.Id = uuid.New().String()
+	items = b.GenerateBookingItems(priceID, rateID, supplierID)
+
+	booking.Booking.Items = items
+
+	b.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from supplier json file")
+	b.logger.Logger().WithFields(logrus.Fields{"Supplier": booking,}).Debug(booking)
+
+	ResponsePostBookingEnvelope, resp, err := b.Client().BookingsApi.CreateBooking(*ctx, booking)
+
+	b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "create Booking response resp statusCode": resp.StatusCode, "err": err}).Debug("ResponsePostBookingEnvelope")
+
+	if err != nil {
+		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "booking response resp statusCode": resp.StatusCode, "create booking body": resp.Body, "err": err}).Error("Booking api create booking error")
+		return err
+	}
+
+	return nil
+}
+
+func (b *BookingClient) GenerateBookingItems(priceID, rateID, supplierID string) ([]swclient.RequestPostBookingEnvelopeBookingItems) {
+	var (
+		item  = new(swclient.RequestPostBookingEnvelopeBookingItems)
+		items []swclient.RequestPostBookingEnvelopeBookingItems
+	)
+
+	item.PriceId = priceID
+	item.SupplierId = supplierID
+	item.RateId = rateID
+	item.AvailabilityId = uuid.New().String()
+	items = append(items, *item)
+
+	return items
 }

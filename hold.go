@@ -14,7 +14,7 @@ import (
 
 func Run() {
 	var (
-		channelsApiHeaders = make(map[string]string)
+		//channelsApiHeaders = make(map[string]string)
 		channelsClient     *channels.ChannelsClient
 		//bookingClient      *booking.BookingClient
 		ctx                = context.Background()
@@ -42,13 +42,13 @@ func Run() {
 		panic(err)
 	}
 	//
-	channelsClient, err = channels.NewChannelClient(channelsApiHeaders)
+	channelsClient, err = channels.NewChannelClient("test","test")
 
 	if err != nil {
 		panic(err)
 	}
 
-	getSupplier, resp, err = channelsClient.Client.SuppliersApi.GetSupplier(ctx, channels.SupplierID)
+	getSupplier, resp, err = channelsClient.Client.SuppliersApi.GetSupplier(ctx, "channels.SupplierID")
 
 	if getSupplier.Supplier == nil {
 		panic("Supplier isn't found")

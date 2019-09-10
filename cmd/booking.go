@@ -16,36 +16,115 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"context"
+	"errors"
+	"io/ioutil"
 
-	"github.com/spf13/cobra"
+	"github.com/NickTaporuk/channels_booking_clients/booking"
+	"github.com/NickTaporuk/channels_booking_clients/channels"
+	"github.com/NickTaporuk/channels_booking_clients/config"
+	"github.com/NickTaporuk/channels_booking_clients/logger"
+	"github.com/NickTaporuk/channels_booking_clients/utils"
+	"github.com/sirupsen/logrus"
 )
 
-// bookingCmd represents the booking command
-var bookingCmd = &cobra.Command{
-	Use:   "booking",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+const (
+	BookingCommandName = "booking"
+)
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("booking called")
-	},
+var (
+	ErrorBookingFileIsNotFound = errors.New("file is not found by path")
+)
+
+// BookingRepository
+type BookingRepository struct {
+	client        *booking.BookingClient
+	channelClient *channels.ChannelsClient
+	ctx           *context.Context
+	logger        *logger.LocalLogger
+	configuration *config.Configuration
+	name          string
 }
 
-func init() {
-	//rootCmd.AddCommand(bookingCmd)
+func (s *BookingRepository) ChannelClient() *channels.ChannelsClient {
+	return s.channelClient
+}
 
-	// Here you will define your flags and configuration settings.
+func (s *BookingRepository) SetChannelClient(channelClient *channels.ChannelsClient) {
+	s.channelClient = channelClient
+}
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// bookingCmd.PersistentFlags().String("foo", "", "A help for foo")
+func NewBookingRepository(client *booking.BookingClient, channelClient *channels.ChannelsClient, ctx *context.Context, logger *logger.LocalLogger, configuration *config.Configuration) *BookingRepository {
+	return &BookingRepository{client: client, channelClient: channelClient, ctx: ctx, logger: logger, configuration: configuration}
+}
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// bookingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+func (s *BookingRepository) Name() string {
+	return BookingCommandName
+}
+
+func (s *BookingRepository) Configuration() *config.Configuration {
+	return s.configuration
+}
+
+func (s *BookingRepository) SetConfiguration(configuration *config.Configuration) {
+	s.configuration = configuration
+}
+
+func (s *BookingRepository) Logger() *logger.LocalLogger {
+	return s.logger
+}
+
+func (s *BookingRepository) SetLogger(logger *logger.LocalLogger) {
+	s.logger = logger
+}
+
+func (s *BookingRepository) Ctx() *context.Context {
+	return s.ctx
+}
+
+func (s *BookingRepository) SetCtx(ctx *context.Context) {
+	s.ctx = ctx
+}
+
+func (s *BookingRepository) Client() *booking.BookingClient {
+	return s.client
+}
+
+func (s *BookingRepository) SetClient(client *booking.BookingClient) {
+	s.client = client
+}
+
+// Execute represents the supplier command
+func (s *BookingRepository) Execute() error {
+	var (
+		err error
+	)
+
+	if s.configuration.Booking.ID != "" {
+		if err = utils.CheckIsUUIDTypeOfFlagValue(s.configuration.Booking.ID); err == nil {
+			if err = utils.CheckBookingExist(s.configuration.Booking.ID, s.client, s.ctx, s.logger); err != nil {
+				s.logger.Logger().WithFields(logrus.Fields{"supplier": s, "error": err}).Error(err)
+				return err
+			}
+		}
+	} else if s.configuration.Booking.Path != "" {
+		err = utils.CheckIsPathTypeOfFlagValue(s.configuration.Booking.Path)
+		if err == nil {
+
+			data, err := ioutil.ReadFile(s.configuration.Booking.Path)
+			if err != nil {
+				s.logger.Logger().WithField("Booking", "error").WithFields(logrus.Fields{"error": ErrorBookingFileIsNotFound,}).Error(err)
+				return err
+			}
+			priceID := s.channelClient.PriceIDs()[0]
+			rateID := s.channelClient.RateIDs()[0]
+			supplierID := s.channelClient.SupplierID()
+			err = s.client.CreateBooking(priceID, rateID, supplierID, &data, s.Ctx())
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return err
 }

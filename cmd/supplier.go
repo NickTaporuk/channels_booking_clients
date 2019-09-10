@@ -107,7 +107,7 @@ func (s *SupplierRepository) Execute() error {
 				return err
 			}
 
-			err = s.client.CreateSupplier(&data)
+			err = s.client.CreateSupplier(&data, s.Ctx())
 			if err != nil {
 				return err
 			}

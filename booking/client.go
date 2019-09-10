@@ -2,18 +2,27 @@ package booking
 
 import (
 	"bitbucket.org/redeam/integration-booking/swclient"
-	"github.com/sirupsen/logrus"
+	"github.com/NickTaporuk/channels_booking_clients/logger"
 )
 
 const (
-	XAPIKey    = "key-redeam-qa-4f9c3z68"
-	XAPISecret = "secret-redeam-qa-v8z73c9x"
-	SupplierID = "b0105adc-3693-4e42-8905-cbbd97f80bbb"
+	// HeaderKeyXAPIKey
+	HeaderKeyXAPIKey = "X-API-Key"
+	//
+	HeaderKeyXAPISecret = "X-API-Secret"
 )
 
 type BookingClient struct {
 	client *swclient.APIClient
-	logger *logrus.Logger
+	logger *logger.LocalLogger
+}
+
+func (b *BookingClient) Logger() *logger.LocalLogger {
+	return b.logger
+}
+
+func (b *BookingClient) SetLogger(logger *logger.LocalLogger) {
+	b.logger = logger
 }
 
 func (b *BookingClient) Client() *swclient.APIClient {
@@ -24,22 +33,16 @@ func (b *BookingClient) SetClient(client *swclient.APIClient) {
 	b.client = client
 }
 
-func (b *BookingClient) Logger() *logrus.Logger {
-	return b.logger
-}
-
-func (b *BookingClient) SetLogger(logger *logrus.Logger) {
-	b.logger = logger
-}
-
-func NewBookingClient(headers map[string]string) (*BookingClient, error) {
+// NewBookingClient
+func NewBookingClient(xAPIKey, xAPISecret string) (*BookingClient, error) {
 
 	var (
-		client *swclient.APIClient
+		headers = make(map[string]string)
+		client  *swclient.APIClient
 	)
 
-	headers["X-API-Key"] = XAPIKey
-	headers["X-API-Secret"] = XAPISecret
+	headers[HeaderKeyXAPIKey] = xAPIKey
+	headers[HeaderKeyXAPISecret] = xAPISecret
 
 	cnf := swclient.NewConfiguration()
 	cnf.DefaultHeader = headers
