@@ -17,13 +17,13 @@ package cmd
 
 import (
 	"context"
-	"github.com/NickTaporuk/channels_booking_clients/booking"
-	"github.com/NickTaporuk/channels_booking_clients/utils"
 	"os"
 
+	"github.com/NickTaporuk/channels_booking_clients/booking"
 	"github.com/NickTaporuk/channels_booking_clients/channels"
 	"github.com/NickTaporuk/channels_booking_clients/config"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
+	"github.com/NickTaporuk/channels_booking_clients/utils"
 	"github.com/sirupsen/logrus"
 )
 
@@ -32,12 +32,12 @@ import (
 func Execute() {
 	var (
 		channelsClient *channels.ChannelsClient
-		bookingClient      *booking.BookingClient
-		ctx  = context.Background()
-		err  error
-		data = make(map[string]string)
-		lgr  *logger.LocalLogger
-		cfg  *config.Configuration
+		bookingClient  *booking.BookingClient
+		ctx            = context.Background()
+		err            error
+		data           = make(map[string]string)
+		lgr            *logger.LocalLogger
+		cfg            *config.Configuration
 	)
 
 	lgr = &logger.LocalLogger{}
@@ -128,7 +128,7 @@ func Execute() {
 	}
 	bookingClient.SetLogger(lgr)
 
-	booking := NewBookingRepository(bookingClient,channelsClient, &ctx, lgr, cfg)
+	booking := NewBookingRepository(bookingClient, channelsClient, &ctx, lgr, cfg)
 	err = booking.Execute()
 	if err != nil {
 		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)

@@ -1,12 +1,13 @@
 package logger
 
 import (
-	"github.com/sirupsen/logrus"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 type LocalLogger struct {
@@ -40,10 +41,12 @@ func (l *LocalLogger) Close() {
 
 // Init init logger
 func (l *LocalLogger) Init(data map[string]string) error {
-	var logger *logrus.Logger
-	var loggingLevel logrus.Level
-	var loggerLevel = data["level"]
-	var err error
+	var (
+		logger       *logrus.Logger
+		loggingLevel logrus.Level
+		loggerLevel  = data["level"]
+		err          error
+	)
 
 	cwd, err := os.Getwd()
 	if err != nil {

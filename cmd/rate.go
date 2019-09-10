@@ -1,5 +1,5 @@
 /*
-Copyright © 2019 NAME HERE <EMAIL ADDRESS>
+Copyright © 2019 Nickolay Kuropatkin nictaporuk@gmail.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package cmd
 import (
 	"context"
 	"errors"
+
 	"github.com/NickTaporuk/channels_booking_clients/channels"
 	"github.com/NickTaporuk/channels_booking_clients/config"
 	"github.com/NickTaporuk/channels_booking_clients/logger"

@@ -3,12 +3,12 @@ package utils
 import (
 	"context"
 	"errors"
-	"github.com/NickTaporuk/channels_booking_clients/booking"
 	"net/http"
 	"os"
 
 	bc "bitbucket.org/redeam/integration-booking/swclient"
 	"bitbucket.org/redeam/integration-channel/swclient"
+	"github.com/NickTaporuk/channels_booking_clients/booking"
 	"github.com/NickTaporuk/channels_booking_clients/channels"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
 	"github.com/google/uuid"
@@ -147,9 +147,9 @@ func CheckChannelBindingExist(channelID string, channelsClient *channels.Channel
 // CheckRateExist is used to check exist supplier by uuid
 func CheckBookingExist(bookingID string, bookingClient *booking.BookingClient, ctx *context.Context, lgr *logger.LocalLogger) error {
 	var (
-		booking  bc.ResponseGetBookingEnvelope
-		resp           *http.Response
-		err            error
+		booking bc.ResponseGetBookingEnvelope
+		resp    *http.Response
+		err     error
 	)
 
 	booking, resp, err = bookingClient.Client().BookingsApi.GetBooking(*ctx, bookingID)
