@@ -1,10 +1,10 @@
 {
   "meta": {
-    "reqId": "c4d6279a-8b54-4356-8da3-70b86649f04b"
+    "reqId": ""
   },
   "rate": {
     "cancelable": true,
-    "code": "TEST-c4d6279a-8b54-4356-8da3-70b86649f04b",
+    "code": "",
     "cutoff": 1,
     "holdable": true,
     "holdablePeriod": 864000,
@@ -57,29 +57,6 @@
           "maxAge": 99,
           "minAge": 13,
           "name": "Jane Doe"
-        }
-      },
-      {
-        "id": "61c5021e-2840-4277-93aa-495b56d2b090",
-        "labels": [
-          "A",
-          "B",
-          "C"
-        ],
-        "name": "rate-price-name-2-Nick-Kuropatkin-Test_3",
-        "net": {
-          "amount": 40,
-          "currency": "USD"
-        },
-        "retail": {
-          "amount": 80,
-          "currency": "EUR"
-        },
-        "travelerType": {
-          "ageBand": "SENIOR",
-          "maxAge": 99,
-          "minAge": 13,
-          "name": "Nick Kuropatkin"
         }
       }
     ],

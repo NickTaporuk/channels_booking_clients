@@ -1,7 +1,7 @@
 {
   "product": {
     "code": "",
-    "description": "Nick Kuropatkin Test Product decription 3",
+    "description": "",
     "hours": [
       {
         "dates": [],
@@ -38,8 +38,8 @@
       "notes": "",
       "utcOffset": "+01:00"
     },
-    "name": "Nick Kuropatkin Test product 33",
+    "name": "",
     "status": "UNKNOWN",
-    "title": "Nick Kuropatkin Test product 23"
+    "title": ""
   }
 }

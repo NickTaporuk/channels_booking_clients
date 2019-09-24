@@ -116,6 +116,7 @@ func (s *BookingRepository) Execute() error {
 				s.logger.Logger().WithField("Booking", "error").WithFields(logrus.Fields{"error": ErrorBookingFileIsNotFound,}).Error(err)
 				return err
 			}
+
 			priceID := s.channelClient.PriceIDs()[0]
 			rateID := s.channelClient.RateIDs()[0]
 			supplierID := s.channelClient.SupplierID()

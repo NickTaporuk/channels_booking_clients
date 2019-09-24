@@ -12,28 +12,28 @@
     "XAPISecret": "secret-redeam-qa-v8z73c9x"
   },
   "supplier": {
-    "id": "9b74836e-ab55-42ab-996d-197497b3dee4",
-    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/supplier.json"
+    "id": "b0105adc-3693-4e42-8905-cbbd97f80bbb",
+    "path": "./data/supplier.json"
   },
   "product": {
     "id": "",
-    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/product.json"
+    "path": "./data/product.json"
   },
   "rate": {
     "id": "",
-    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/rate.json"
+    "path": "./data/rate.json"
   },
   "channelBinding": {
     "id": "",
-    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/channelBinding.json"
+    "path": "./data/channelBinding.json"
   },
   "booking": {
     "id": "",
-    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/booking.json"
+    "path": "./data/booking.json"
   },
   "hold": {
     "id": "",
-    "path": "/Users/nick/go/src/github.com/NickTaporuk/channels_booking_clients/data/hold.json"
+    "path": "./data/hold.json"
   },
-  "stopAfterEntity": "booking"
+  "stopAfterEntity": "product"
 }

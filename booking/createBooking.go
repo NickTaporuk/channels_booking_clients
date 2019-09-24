@@ -3,6 +3,7 @@ package booking
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 
 	"bitbucket.org/redeam/integration-booking/swclient"
 	"github.com/google/uuid"
@@ -27,6 +28,7 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 		booking.Booking.Items[i].SupplierId = supplierID
 		booking.Booking.Items[i].RateId = rateID
 		booking.Booking.Items[i].AvailabilityId = uuid.New().String()
+		booking.Booking.Items[i].Id = uuid.New().String()
 	}
 
 	b.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from supplier json file")
@@ -34,11 +36,19 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 
 	ResponsePostBookingEnvelope, resp, err := b.Client().BookingsApi.CreateBooking(*ctx, *booking)
 
-	b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "create Booking response resp statusCode": resp.StatusCode, "err": err}).Debug("ResponsePostBookingEnvelope")
+    var statusCode	int
+	if resp == nil {
+		statusCode = http.StatusBadGateway
+	} else {
+		statusCode = resp.StatusCode
+	}
+
 
 	if err != nil {
-		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "booking response resp statusCode": resp.StatusCode, "create booking body": resp.Body, "err": err}).Error("Booking api create booking error")
+		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "booking response resp statusCode": statusCode, "create booking body": resp.Body, "err": err.(swclient.GenericSwaggerError).Model()}).Error("Booking api create booking error")
 		return err
+	} else {
+		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "create Booking response resp statusCode":  statusCode, "err": err}).Debug("ResponsePostBookingEnvelope")
 	}
 
 	return nil

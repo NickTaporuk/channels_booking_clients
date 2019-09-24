@@ -85,50 +85,54 @@ func Execute() {
 	supplier := NewSupplierRepository(channelsClient, &ctx, lgr, cfg)
 	err = supplier.Execute()
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"supplier": supplier, "error": err}).Error(err)
+		channelsClient.String()
 		panic(err)
 	}
 
 	if supplier.Name() == cfg.StopAfterEntity {
-		lgr.Logger().WithFields(logrus.Fields{"supplier": supplier, "error": err}).Error(err)
+		channelsClient.String()
 		os.Exit(0)
 	}
 
 	product := NewProductRepository(channelsClient, &ctx, lgr, cfg)
 	err = product.Execute()
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"product": product, "error": err}).Error(err)
+		channelsClient.String()
 		panic(err)
 	}
 
 	if product.Name() == cfg.StopAfterEntity {
+		channelsClient.String()
 		os.Exit(0)
 	}
 
 	rate := NewRateRepository(channelsClient, &ctx, lgr, cfg)
 	err = rate.Execute()
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"rate": rate, "error": err}).Error(err)
+		channelsClient.String()
 		panic(err)
 	}
 
 	if rate.Name() == cfg.StopAfterEntity {
+		channelsClient.String()
 		os.Exit(0)
 	}
 
 	channelBinding := NewChannelBindingRepository(channelsClient, &ctx, lgr, cfg)
 	err = channelBinding.Execute()
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"channelBinding": channelBinding, "error": err}).Error(err)
+		channelsClient.String()
 		panic(err)
 	}
 
 	if channelBinding.Name() == cfg.StopAfterEntity {
+		channelsClient.String()
 		os.Exit(0)
 	}
 
 	bookingClient, err = booking.NewBookingClient(cfg.BookingEnv.XAPIKey, cfg.BookingEnv.XAPISecret)
 	if err != nil {
+		channelsClient.String()
 		lgr.Logger().WithFields(logrus.Fields{"request": channelBinding}).Fatal("Booking client is not initialized")
 	}
 
@@ -137,11 +141,12 @@ func Execute() {
 	booking := NewBookingRepository(bookingClient, channelsClient, &ctx, lgr, cfg)
 	err = booking.Execute()
 	if err != nil {
-		lgr.Logger().WithFields(logrus.Fields{"booking": booking, "error": err}).Error(err)
+		channelsClient.String()
 		panic(err)
 	}
 
 	if booking.Name() == cfg.StopAfterEntity {
+		channelsClient.String()
 		os.Exit(0)
 	}
 
@@ -149,11 +154,13 @@ func Execute() {
 
 	err = hold.Execute()
 	if err != nil {
+		channelsClient.String()
 		lgr.Logger().WithFields(logrus.Fields{"hold": hold, "error": err}).Error(err)
 		panic(err)
 	}
 
 	if hold.Name() == cfg.StopAfterEntity {
+		channelsClient.String()
 		os.Exit(0)
 	}
 }

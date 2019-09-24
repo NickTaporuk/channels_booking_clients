@@ -3,6 +3,7 @@ package channels
 import (
 	"bitbucket.org/redeam/integration-channel/swclient"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -74,6 +75,10 @@ func (ch *ChannelsClient) SupplierID() string {
 
 func (ch *ChannelsClient) SetSupplierID(supplierID string) {
 	ch.supplierID = supplierID
+}
+
+func (ch ChannelsClient) String() {
+	ch.logger.Logger().WithFields(logrus.Fields{"supplier ID":ch.supplierID,"product ID":ch.productID, "rate ID":ch.rateIDs, "price ID":ch.priceIDs}).Debug("channel client data")
 }
 
 // NewChannelClient is constructor for channels api

@@ -1,10 +1,10 @@
 package channels
 
 import (
+	"bitbucket.org/redeam/integration-channel/swclient"
 	"context"
 	"encoding/json"
-
-	"bitbucket.org/redeam/integration-channel/swclient"
+	"github.com/brianvoe/gofakeit"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"syreclabs.com/go/faker"
@@ -27,14 +27,14 @@ func (ch *ChannelsClient) CreateRate(data *[]byte, ctx *context.Context) error {
 	rate.Rate.Code = faker.App().Author() + faker.App().Name()
 	rate.Rate.Id = uuid.New().String()
 	rate.Rate.ProductId = ch.productID
-	//rate.Rate.Prices = []swclient.RequestPostRateEnvelopeRatePrices{
-	//	ch.GenPrice(),
-	//}
+	rate.Rate.Name = faker.App().Author() + faker.App().Name()
 
 	for i, _ := range rate.Rate.Prices {
 		rate.Rate.Prices[i].Id = uuid.New().String()
-
+		rate.Rate.Prices[i].Name = gofakeit.Sentence(20)
 	}
+
+	//rate.Rate.Prices = []swclient.RequestPostRateEnvelopeRatePrices{ch.GenPrice()}
 
 	ch.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from rate json file")
 	ch.logger.Logger().WithFields(logrus.Fields{"Rate": rate,}).Debug("rate debug")
@@ -60,28 +60,28 @@ func (ch *ChannelsClient) CreateRate(data *[]byte, ctx *context.Context) error {
 	return nil
 }
 
-//func (ch *ChannelsClient) GenPrice() swclient.RequestPostRateEnvelopeRatePrices {
-//	return swclient.RequestPostRateEnvelopeRatePrices{
-//		Id: uuid.New().String(),
-//		Labels: []string{
-//			"A",
-//			"B",
-//			"C",
-//		},
-//		Name: gofakeit.Sentence(20),
-//		Net: &swclient.RequestPostRateEnvelopeRateNet{
-//			Amount:   int64(gofakeit.Number(5, 100)),
-//			Currency: gofakeit.Currency().Short,
-//		},
-//		Retail: &swclient.RequestPostRateEnvelopeRateRetail{
-//			Amount:   int64(gofakeit.Number(5, 10)),
-//			Currency: gofakeit.Currency().Short,
-//		},
-//		TravelerType: &swclient.RequestPostRateEnvelopeRateTravelerType{
-//			AgeBand: "ADULT",
-//			MaxAge:  int32(gofakeit.Number(25, 100)),
-//			MinAge:  int32(gofakeit.Number(21, 24)),
-//			Name:    gofakeit.Person().FirstName,
-//		},
-//	}
-//}
+func (ch *ChannelsClient) GenPrice() swclient.RequestPostRateEnvelopeRatePrices {
+	return swclient.RequestPostRateEnvelopeRatePrices{
+		Id: uuid.New().String(),
+		Labels: []string{
+			"A",
+			"B",
+			"C",
+		},
+		Name: gofakeit.Sentence(20),
+		Net: &swclient.RequestPostRateEnvelopeRateNet{
+			Amount:   int64(gofakeit.Number(5, 100)),
+			Currency: gofakeit.Currency().Short,
+		},
+		Retail: &swclient.RequestPostRateEnvelopeRateRetail{
+			Amount:   int64(gofakeit.Number(5, 10)),
+			Currency: gofakeit.Currency().Short,
+		},
+		TravelerType: &swclient.RequestPostRateEnvelopeRateTravelerType{
+			AgeBand: "ADULT",
+			MaxAge:  int32(gofakeit.Number(25, 100)),
+			MinAge:  int32(gofakeit.Number(21, 24)),
+			Name:    gofakeit.Person().FirstName,
+		},
+	}
+}
