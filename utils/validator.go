@@ -19,6 +19,9 @@ var (
 	ErrorSupplierIsNotFound       = errors.New("supplier isn't found")
 	ErrorProductIsNotFound        = errors.New("product isn't found")
 	ErrorRateIsNotFound           = errors.New("rate isn't found")
+	ErrorChannelBindingIsNotFound = errors.New("channel binding isn't found")
+	ErrorBookingIsNotFound        = errors.New("booking isn't found")
+	ErrorHoldIsNotFound           = errors.New("hold isn't found")
 )
 
 // CheckIsUUIDTypeOfSupplierFlagValue is used to check value is uuid type
@@ -97,6 +100,7 @@ func CheckRateExist(supplierID, productID, rateID string, channelsClient *channe
 
 	rate, resp, err = channelsClient.Client.RatesApi.GetRate(*ctx, supplierID, productID, rateID)
 	if err != nil {
+		lgr.Logger().WithField("rate", "not found").WithFields(logrus.Fields{"rate": rate, "response status": resp.StatusCode, "error": err}).Error("rate was not found")
 		return err
 	}
 
@@ -133,7 +137,7 @@ func CheckChannelBindingExist(channelID string, channelsClient *channels.Channel
 	}
 
 	if channelBinding.Channel == nil || channelBinding.Channel.Id == "" {
-		err = ErrorRateIsNotFound
+		err = ErrorChannelBindingIsNotFound
 		lgr.Logger().WithField("ChannelBinding", "not found").WithFields(logrus.Fields{"channelBinding": channelBinding, "response status": resp.StatusCode, "error": err}).Error("channelBinding was not found")
 
 		return err
@@ -160,7 +164,7 @@ func CheckBookingExist(bookingID string, bookingClient *booking.BookingClient, c
 	}
 
 	if booking.Booking == nil || booking.Booking.Id == "" {
-		err = ErrorRateIsNotFound
+		err = ErrorBookingIsNotFound
 		lgr.Logger().WithField("Booking", "not found").WithFields(logrus.Fields{"booking": booking, "response status": resp.StatusCode, "error": err}).Error("booking was not found")
 
 		return err
@@ -181,13 +185,13 @@ func CheckHoldExist(holdID string, bookingClient *booking.BookingClient, ctx *co
 
 	hold, resp, err = bookingClient.Client().HoldsApi.GetHold(*ctx, holdID)
 	if err != nil {
-		lgr.Logger().WithField("Booking", "not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
+		lgr.Logger().WithField("Hold", "not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
 
 		return err
 	}
 
 	if hold.Hold == nil || hold.Hold.Id == "" {
-		err = ErrorRateIsNotFound
+		err = ErrorHoldIsNotFound
 		lgr.Logger().WithField("Hold", "not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
 
 		return err

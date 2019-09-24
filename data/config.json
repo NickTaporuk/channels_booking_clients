@@ -35,5 +35,5 @@
     "id": "",
     "path": "./data/hold.json"
   },
-  "stopAfterEntity": "product"
+  "stopAfterEntity": "hold"
 }
