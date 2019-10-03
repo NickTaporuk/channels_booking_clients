@@ -28,6 +28,7 @@ func (ch *ChannelsClient) CreateProduct(data *[]byte, ctx *context.Context) erro
 	product.Product.Description = faker.App().Author() + faker.App().Name()
 	product.Product.Title = faker.App().Author() + faker.App().Name()
 	product.Product.Name = faker.App().Author() + faker.App().Name()
+	product.Product.SupplierId = ch.supplierID
 
 	ch.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from product json file")
 	ch.logger.Logger().WithFields(logrus.Fields{"Product": product,}).Debug("product debug")

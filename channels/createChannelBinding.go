@@ -22,7 +22,7 @@ func (ch *ChannelsClient) CreateChannelBinding(data *[]byte, ctx *context.Contex
 	channelBinding.Meta = &swclient.RequestPostCreateChannelEnvelopeMeta{ReqId: uuid.New().String()}
 	channelBinding.RateIds = ch.RateIDs()
 
-	ch.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from product json file")
+	ch.logger.Logger().WithFields(logrus.Fields{"file data": string(*data),}).Debug(" data from channel json file")
 	ch.logger.Logger().WithFields(logrus.Fields{"channelBinding": channelBinding,}).Debug("channelBinding debug")
 
 	ResponsePostChannelBindingEnvelope, resp, err := ch.Client.ChannelsApi.CreateChannelBinding(*ctx, ch.ChannelID(), ch.productID, ch.supplierID, *channelBinding)

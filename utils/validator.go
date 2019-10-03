@@ -57,7 +57,7 @@ func CheckSupplierExist(supplierID string, channelsClient *channels.ChannelsClie
 		return ErrorSupplierIsNotFound
 	}
 
-	lgr.Logger().WithField("Supplier", "found").WithFields(logrus.Fields{"Supplier response": supplier, "response status": resp.StatusCode}).Info("Supplier was found")
+	lgr.Logger().WithField("Supplier", "found").WithFields(logrus.Fields{"Supplier response": supplier, "response status": resp.StatusCode}).Debug("Supplier was found")
 
 	channelsClient.SetSupplierID(supplier.Supplier.Id)
 
@@ -77,11 +77,11 @@ func CheckProductExist(supplierID, productID string, channelsClient *channels.Ch
 	}
 
 	if product.Product == nil || product.Product.Id == "" {
-		lgr.Logger().WithField("Product", "not found").WithFields(logrus.Fields{"Product": product, "response status": resp.StatusCode}).Info("Product was not found")
+		lgr.Logger().WithField("Product", "was not found").WithFields(logrus.Fields{"Product": product, "response status": resp.StatusCode}).Debug("Product was not found")
 		return ErrorProductIsNotFound
 	}
 
-	lgr.Logger().WithField("Product", "found").WithFields(logrus.Fields{"Product": product, "response status": resp.StatusCode}).Info("Product was found")
+	lgr.Logger().WithField("Product", "was found").WithFields(logrus.Fields{"Product": product, "response status": resp.StatusCode}).Debug("Product was found")
 
 	channelsClient.SetProductID(product.Product.Id)
 
@@ -116,7 +116,7 @@ func CheckRateExist(supplierID, productID, rateID string, channelsClient *channe
 
 	channelsClient.SetRateIDs(rates)
 	channelsClient.SetPriceIDs(prices)
-	lgr.Logger().WithField("Rate", "found").WithFields(logrus.Fields{"Rate": rate, "response status": resp.StatusCode}).Info("Rate was found")
+	lgr.Logger().WithField("Rate", "found").WithFields(logrus.Fields{"Rate": rate, "response status": resp.StatusCode}).Debug("Rate was found")
 
 	return nil
 }
@@ -185,19 +185,19 @@ func CheckHoldExist(holdID string, bookingClient *booking.BookingClient, ctx *co
 
 	hold, resp, err = bookingClient.Client().HoldsApi.GetHold(*ctx, holdID)
 	if err != nil {
-		lgr.Logger().WithField("Hold", "not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
+		lgr.Logger().WithField("Hold", " was not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
 
 		return err
 	}
 
 	if hold.Hold == nil || hold.Hold.Id == "" {
 		err = ErrorHoldIsNotFound
-		lgr.Logger().WithField("Hold", "not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
+		lgr.Logger().WithField("Hold", "was not found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode, "error": err}).Error("hold was not found")
 
 		return err
 	}
 
-	lgr.Logger().WithField("Hold", "found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode}).Debug("hold was found")
+	lgr.Logger().WithField("Hold", " was found").WithFields(logrus.Fields{"hold": hold, "response status": resp.StatusCode}).Debug("hold was found")
 
 	return nil
 }
