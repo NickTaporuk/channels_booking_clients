@@ -44,5 +44,7 @@ func (b *BookingClient) CreateHold(rateID, supplierID, priceID string, data *[]b
 		return err
 	}
 
+	b.SetHoldID(ResponsePostHoldEnvelope.Hold.Id)
+
 	return nil
 }

@@ -58,7 +58,7 @@ func Execute() {
 
 	data["level"] = cfg.Logger.Level
 
-	err = lgr.Init(data)
+	err = lgr.Init(data, &cfg.Logger)
 	if err != nil {
 		panic(err)
 	}
@@ -142,11 +142,13 @@ func Execute() {
 	err = booking.Execute()
 	if err != nil {
 		channelsClient.String()
+		bookingClient.String()
 		panic(err)
 	}
 
 	if booking.Name() == cfg.StopAfterEntity {
 		channelsClient.String()
+		bookingClient.String()
 		os.Exit(0)
 	}
 
@@ -155,12 +157,14 @@ func Execute() {
 	err = hold.Execute()
 	if err != nil {
 		channelsClient.String()
+		bookingClient.String()
 		lgr.Logger().WithFields(logrus.Fields{"hold": hold, "error": err}).Error(err)
 		panic(err)
 	}
 
 	if hold.Name() == cfg.StopAfterEntity {
 		channelsClient.String()
+		bookingClient.String()
 		os.Exit(0)
 	}
 }

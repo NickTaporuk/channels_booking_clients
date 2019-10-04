@@ -78,7 +78,7 @@ func (ch *ChannelsClient) SetSupplierID(supplierID string) {
 }
 
 func (ch ChannelsClient) String() {
-	ch.logger.Logger().WithFields(logrus.Fields{"supplier ID":ch.supplierID,"product ID":ch.productID, "rate ID":ch.rateIDs, "price ID":ch.priceIDs}).Debug("channel client data")
+	ch.logger.Logger().WithFields(logrus.Fields{"supplier ID":ch.supplierID,"product ID":ch.productID, "rate ID":ch.rateIDs, "price ID":ch.priceIDs}).Info("channel client data")
 }
 
 // NewChannelClient is constructor for channels api

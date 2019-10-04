@@ -3,6 +3,7 @@ package booking
 import (
 	"bitbucket.org/redeam/integration-booking/swclient"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -13,8 +14,26 @@ const (
 )
 
 type BookingClient struct {
-	client *swclient.APIClient
-	logger *logger.LocalLogger
+	client    *swclient.APIClient
+	logger    *logger.LocalLogger
+	holdID    string
+	bookingID string
+}
+
+func (b *BookingClient) BookingID() string {
+	return b.bookingID
+}
+
+func (b *BookingClient) SetBookingID(bookingID string) {
+	b.bookingID = bookingID
+}
+
+func (b *BookingClient) HoldID() string {
+	return b.holdID
+}
+
+func (b *BookingClient) SetHoldID(holdID string) {
+	b.holdID = holdID
 }
 
 func (b *BookingClient) Logger() *logger.LocalLogger {
@@ -31,6 +50,10 @@ func (b *BookingClient) Client() *swclient.APIClient {
 
 func (b *BookingClient) SetClient(client *swclient.APIClient) {
 	b.client = client
+}
+
+func (b *BookingClient) String() {
+	b.logger.Logger().WithFields(logrus.Fields{"booking ID": b.bookingID, "hold ID": b.holdID}).Info("booking client data")
 }
 
 // NewBookingClient

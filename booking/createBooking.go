@@ -36,20 +36,21 @@ func (b *BookingClient) CreateBooking(priceID, rateID, supplierID string, data *
 
 	ResponsePostBookingEnvelope, resp, err := b.Client().BookingsApi.CreateBooking(*ctx, *booking)
 
-    var statusCode	int
+	var statusCode int
 	if resp == nil {
 		statusCode = http.StatusBadGateway
 	} else {
 		statusCode = resp.StatusCode
 	}
 
+	b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "create Booking response resp statusCode": statusCode, "err": err}).Debug("ResponsePostBookingEnvelope")
 
 	if err != nil {
 		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "booking response resp statusCode": statusCode, "create booking body": resp.Body, "err": err.(swclient.GenericSwaggerError).Model()}).Error("Booking api create booking error")
 		return err
-	} else {
-		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostBookingEnvelope": ResponsePostBookingEnvelope, "create Booking response resp statusCode":  statusCode, "err": err}).Debug("ResponsePostBookingEnvelope")
 	}
+
+	b.SetBookingID(ResponsePostBookingEnvelope.Booking.Id)
 
 	return nil
 }
