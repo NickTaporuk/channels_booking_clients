@@ -12,4 +12,3 @@
 # The plan of the several future releases
 
 + create validation before running. Now we have validation only inside the running some entity
-+ logger file logic need update. Now we have generation to stdout and file simultaneously. Need create separate logic of working stdout and file log .
