@@ -2,19 +2,28 @@ package logger
 
 import (
 	"errors"
-	"github.com/NickTaporuk/channels_booking_clients/config"
-	"github.com/sirupsen/logrus"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/NickTaporuk/channels_booking_clients/config"
+	"github.com/sirupsen/logrus"
 )
 
 type LocalLogger struct {
 	logger  *logrus.Logger
 	file    *os.File
 	writers []io.Writer
+}
+
+func (l *LocalLogger) File() *os.File {
+	return l.file
+}
+
+func (l *LocalLogger) SetFile(file *os.File) {
+	l.file = file
 }
 
 func (l *LocalLogger) Writers() []io.Writer {
@@ -42,7 +51,7 @@ func (l *LocalLogger) SetLogger(logger *logrus.Logger) {
 }
 
 func (l *LocalLogger) Close() {
-	var err = l.file.Close()
+	var err = l.File().Close()
 
 	if err != nil {
 		log.Fatal(err)
@@ -104,6 +113,7 @@ func (l *LocalLogger) initLogFileLogging(cfg *config.LoggerConfiguration) error 
 			if err != nil {
 				log.Fatalf("Failed to determine working directory: %s", err)
 			}
+
 			logLocation = filepath.Join(cwd, runID+".log")
 
 		} else {
@@ -113,13 +123,14 @@ func (l *LocalLogger) initLogFileLogging(cfg *config.LoggerConfiguration) error 
 			}
 
 			logLocation = filepath.Join(filePath, runID+".log")
-
 		}
 
 		f, err := os.OpenFile(logLocation, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0755)
 		if err != nil {
 			return err
 		}
+
+		l.SetFile(f)
 
 		l.SetWriter(f)
 	}
