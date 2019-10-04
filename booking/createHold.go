@@ -37,10 +37,10 @@ func (b *BookingClient) CreateHold(rateID, supplierID, priceID string, data *[]b
 
 	ResponsePostHoldEnvelope, resp, err := b.Client().HoldsApi.CreateHold(*ctx, *hold)
 
-	b.logger.Logger().WithFields(logrus.Fields{"ResponsePostHoldEnvelope": ResponsePostHoldEnvelope, "create Hold response resp statusCode": resp.StatusCode, "err": err}).Debug("ResponsePostHoldEnvelope")
+	b.logger.Logger().WithFields(logrus.Fields{"ResponsePostHoldEnvelope": ResponsePostHoldEnvelope, "create Hold response resp statusCode": resp.StatusCode, "err": err, "hold data": hold}).Debug("ResponsePostHoldEnvelope")
 
 	if err != nil {
-		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostHoldEnvelope": ResponsePostHoldEnvelope, "hold response resp statusCode": resp.StatusCode, "create hold body": resp.Body, "err": err}).Error("Hold api create hold error")
+		b.logger.Logger().WithFields(logrus.Fields{"ResponsePostHoldEnvelope": ResponsePostHoldEnvelope, "hold response resp statusCode": resp.StatusCode, "create hold body": resp.Body, "err": err.(swclient.GenericSwaggerError).Model()}).Error("Hold api create hold error")
 		return err
 	}
 

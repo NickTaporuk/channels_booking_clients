@@ -2,7 +2,7 @@
   "logger": {
     "level": "debug"
   },
-  "channelID": "63bb6368-7cda-4dd2-ba20-68280b4db77e",
+  "channelID": "546bd79e-f7fd-48c1-977e-a65ad1b99f88",
   "bookingEnv": {
     "XAPIKey": "key-redeam-qa-4f9c3z68",
     "XAPISecret": "secret-redeam-qa-v8z73c9x"
