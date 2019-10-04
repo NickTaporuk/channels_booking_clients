@@ -10,18 +10,16 @@ builds:
 - env:
   - CGO_ENABLED=0
 archives:
-  # Additional files/globs you want to add to the archive.
-  # Defaults are any files matching `LICENCE*`, `LICENSE*`,
-  # `README*` and `CHANGELOG*` (case-insensitive).
-  files:
-    - README.md
-    - data/*
-- replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+  -
+    files:
+      - README.md
+      - data/*
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
 checksum:
   name_template: 'checksums.txt'
 snapshot:
