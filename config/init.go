@@ -16,7 +16,7 @@ func NewConfig() (*Configuration, error) {
 	v := viper.New()
 	// Set the path to look for the configurations file
 	v.AddConfigPath("./data")
-	v.AddConfigPath("$HOME/.cbc")
+	v.AddConfigPath("$HOME/.cbg")
 
 	v.SetConfigName(configFileName)
 
