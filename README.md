@@ -1,4 +1,4 @@
-# channels_booking_clients
+# Channel booking data generator
 ### Package directories structure
     ├── booking     - scripts creating the record some type of entity of booking api
     ├── channels    - scripts creating the record some type of entity of channel api
