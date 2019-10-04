@@ -19,17 +19,15 @@ builds:
       - amd64
 archives:
   -
-    files:
-      - README.md
-      - data/*
-  -
     name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     replacements:
       darwin: Darwin
       linux: Linux
       windows: Windows
-      386: i386
       amd64: x86_64
+    files:
+      - README.md
+      - data/*
     format: binary
   -
     id: homebrew
