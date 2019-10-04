@@ -71,3 +71,5 @@ brews:
     folder: Formula
     caveats: "How to use this binary"
     description: "Software to create generation uuid for all steps from channel to booking."
+    install: |
+      bin.install "channels_booking_clients"
