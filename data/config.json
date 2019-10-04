@@ -1,7 +1,7 @@
 {
   "logger": {
     "level": "info",
-    "filePath": ".",
+    "filePath": "./log",
     "file": true,
     "stdout": true
   },

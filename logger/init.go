@@ -122,6 +122,11 @@ func (l *LocalLogger) initLogFileLogging(cfg *config.LoggerConfiguration) error 
 				return err
 			}
 
+			err = os.MkdirAll(filePath, os.ModePerm)
+			if err != nil {
+				return err
+			}
+
 			logLocation = filepath.Join(filePath, runID+".log")
 		}
 
