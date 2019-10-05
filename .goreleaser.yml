@@ -61,7 +61,7 @@ brews:
       owner: NickTaporuk
       name: homebrew-tap
 
-    url_template: "https://github.com/NickTaporuk/channels_booking_clients/releases/{{ .Tag }}/{{ .ArtifactName }}"
+    url_template: "https://github.com/NickTaporuk/channels_booking_clients/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
 
     # Git author used to commit to the repository.
     # Defaults are shown.
