@@ -55,7 +55,7 @@ env_files:
   github_token: ~/.gittoken
 brews:
   -
-    name: channel_booking_generator
+    name: channels_booking_clients
     # Github repository to push the tap to.
     github:
       owner: NickTaporuk
