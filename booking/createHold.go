@@ -1,9 +1,10 @@
 package booking
 
 import (
-	"bitbucket.org/redeam/integration-booking/swclient"
 	"context"
 	"encoding/json"
+
+	"bitbucket.org/redeam/integration-booking/swclient"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
