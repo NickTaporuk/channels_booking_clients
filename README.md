@@ -1,4 +1,4 @@
-# Channel booking data generator
+# Channel and booking data generator
 ## Summary
     Package was developed for automate the routine of creating entities for booking and channels api of Redeam API's
 ### Package directories structure
