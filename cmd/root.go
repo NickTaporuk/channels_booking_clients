@@ -47,37 +47,37 @@ func Execute() {
 	if err != nil {
 		lgr.Logger().WithFields(logrus.Fields{"cfg": cfg, "error": "configuration initialization is failed"}).Error(err)
 
-		panic(err)
+		os.Exit(1)
 	}
 
 	if cfg.Logger.Level == "" {
 		lgr.Logger().WithFields(logrus.Fields{"logger level": cfg.Logger.Level, "error": "logger level is empty"}).Error(err)
 
-		panic(err)
+		os.Exit(1)
 	}
 
 	data["level"] = cfg.Logger.Level
 
 	err = lgr.Init(data, &cfg.Logger)
 	if err != nil {
-		panic(err)
+		os.Exit(1)
 	}
 
 	lgr.Logger().WithFields(logrus.Fields{"config": cfg}).Debug("Debug configuration")
 
 	err = ValidateStopAfterEntity(cfg.StopAfterEntity)
 	if err != nil {
-		panic(err)
+		os.Exit(1)
 	}
 
 	channelsClient, err = channels.NewChannelClient(cfg.ChannelEnv.XAPIKey, cfg.ChannelEnv.XAPISecret)
 	if err != nil {
-		panic(err)
+		os.Exit(1)
 	}
 	channelsClient.SetLogger(lgr)
 
 	if err = utils.CheckIsUUIDTypeOfFlagValue(cfg.ChannelID); err != nil {
-		panic(err)
+		os.Exit(1)
 	} else {
 		channelsClient.SetChannelID(cfg.ChannelID)
 	}
@@ -86,7 +86,7 @@ func Execute() {
 	err = supplier.Execute()
 	if err != nil {
 		channelsClient.String()
-		panic(err)
+		os.Exit(1)
 	}
 
 	if supplier.Name() == cfg.StopAfterEntity {
@@ -98,7 +98,7 @@ func Execute() {
 	err = product.Execute()
 	if err != nil {
 		channelsClient.String()
-		panic(err)
+		os.Exit(1)
 	}
 
 	if product.Name() == cfg.StopAfterEntity {
@@ -110,7 +110,7 @@ func Execute() {
 	err = rate.Execute()
 	if err != nil {
 		channelsClient.String()
-		panic(err)
+		os.Exit(1)
 	}
 
 	if rate.Name() == cfg.StopAfterEntity {
@@ -122,7 +122,7 @@ func Execute() {
 	err = channelBinding.Execute()
 	if err != nil {
 		channelsClient.String()
-		panic(err)
+		os.Exit(1)
 	}
 
 	if channelBinding.Name() == cfg.StopAfterEntity {
@@ -143,7 +143,7 @@ func Execute() {
 	if err != nil {
 		channelsClient.String()
 		bookingClient.String()
-		panic(err)
+		os.Exit(1)
 	}
 
 	if booking.Name() == cfg.StopAfterEntity {
@@ -159,7 +159,7 @@ func Execute() {
 		channelsClient.String()
 		bookingClient.String()
 		lgr.Logger().WithFields(logrus.Fields{"hold": hold, "error": err}).Error(err)
-		panic(err)
+		os.Exit(1)
 	}
 
 	if hold.Name() == cfg.StopAfterEntity {
