@@ -16,8 +16,6 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
-
 	"github.com/NickTaporuk/channels_booking_clients/cmd"
 )
 
@@ -29,6 +27,5 @@ var (
 )
 
 func main() {
-	fmt.Println("DATA:==>", version, commit, date)
 	cmd.Execute(version, commit, date)
 }
