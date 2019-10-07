@@ -41,7 +41,6 @@ func Execute(version, commit, date string) {
 	Commit = commit
 	Date = date
 
-	RootCmd.AddCommand(infoCmd)
 	if err := RootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
