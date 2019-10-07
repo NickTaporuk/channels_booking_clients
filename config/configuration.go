@@ -12,5 +12,6 @@ type Configuration struct {
 	ChannelBinding  ChannelBindingConfiguration
 	Booking         BookingConfiguration
 	Hold            HoldConfiguration
+	Compilation     CompilationConfiguration
 	StopAfterEntity string
 }

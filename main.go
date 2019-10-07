@@ -16,9 +16,19 @@ limitations under the License.
 package main
 
 import (
+	"fmt"
+
 	"github.com/NickTaporuk/channels_booking_clients/cmd"
 )
 
+var (
+	// Populated by goreleaser during build
+	version string
+	commit  string
+	date    string
+)
+
 func main() {
-	cmd.Execute()
+	fmt.Println("DATA:==>", version, commit, date)
+	cmd.Execute(version, commit, date)
 }

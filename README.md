@@ -59,3 +59,4 @@ Run `channels_booking_clients ` or `./channels_booking_clients` to run the packa
 + need to crete initialization of the directory ./data for brew because we 
     can use two path of directory data.
     The configuration directory "data" have to exist either inside the directory "$HOME/.cbg" or inside directory where we run binary file
++ create rollback system for testing behavior of responses and after that remove all created records

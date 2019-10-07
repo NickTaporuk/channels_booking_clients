@@ -69,7 +69,7 @@ func (l *LocalLogger) Init(data map[string]string, cfg *config.LoggerConfigurati
 	logger := logrus.New()
 
 	// Log as JSON instead of the default ASCII formatter.
-	logger.SetFormatter(&logrus.JSONFormatter{PrettyPrint: true})
+	logger.SetFormatter(&logrus.JSONFormatter{PrettyPrint: cfg.PrettyPrint})
 
 	// Only logger the warning severity or above.
 	loggingLevel, err := logrus.ParseLevel(loggerLevel)
@@ -108,7 +108,7 @@ func (l *LocalLogger) initLogFileLogging(cfg *config.LoggerConfiguration) error 
 		var err error
 		runID := time.Now().Format("cbg-2006-01-02-15-04-05")
 
-		if cfg.FilePath == "" {
+		if cfg.FilePath == "" || cfg.FilePath == "." {
 			cwd, err := os.Getwd()
 			if err != nil {
 				log.Fatalf("Failed to determine working directory: %s", err)
@@ -122,9 +122,11 @@ func (l *LocalLogger) initLogFileLogging(cfg *config.LoggerConfiguration) error 
 				return err
 			}
 
-			err = os.MkdirAll(filePath, os.ModePerm)
-			if err != nil {
-				return err
+			if _, err = os.Stat(filePath); os.IsNotExist(err) {
+				err = os.MkdirAll(filePath, os.ModePerm)
+				if err != nil {
+					return err
+				}
 			}
 
 			logLocation = filepath.Join(filePath, runID+".log")

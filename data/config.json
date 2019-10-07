@@ -3,7 +3,8 @@
     "level": "debug",
     "filePath": "./log",
     "file": true,
-    "stdout": true
+    "stdout": true,
+    "prettyPrint": true
   },
   "channelID": "546bd79e-f7fd-48c1-977e-a65ad1b99f88",
   "bookingEnv": {
