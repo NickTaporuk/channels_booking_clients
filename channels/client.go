@@ -3,7 +3,8 @@ package channels
 import (
 	"bitbucket.org/redeam/integration-channel/swclient"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
-	"github.com/sirupsen/logrus"
+	"github.com/jedib0t/go-pretty/table"
+	"os"
 )
 
 const (
@@ -78,7 +79,19 @@ func (ch *ChannelsClient) SetSupplierID(supplierID string) {
 }
 
 func (ch ChannelsClient) String() {
-	ch.logger.Logger().WithFields(logrus.Fields{"supplier ID":ch.supplierID,"product ID":ch.productID, "rate ID":ch.rateIDs, "price ID":ch.priceIDs}).Info("channel client data")
+	t := table.NewWriter()
+	t.SetStyle(table.StyleLight)
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"#", "Entity Name", "UUID",})
+	t.AppendRows([]table.Row{
+		{1, "supplierID", ch.supplierID},
+		{2, "productID", ch.productID},
+		{3, "rateIDs", ch.rateIDs},
+		{4, "priceIDs", ch.priceIDs},
+	})
+	t.Render()
+
+	//ch.logger.Logger().WithFields(logrus.Fields{"supplier ID":ch.supplierID,"product ID":ch.productID, "rate ID":ch.rateIDs, "price ID":ch.priceIDs}).Info("channel client data")
 }
 
 // NewChannelClient is constructor for channels api

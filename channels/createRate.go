@@ -1,9 +1,10 @@
 package channels
 
 import (
-	"bitbucket.org/redeam/integration-channel/swclient"
 	"context"
 	"encoding/json"
+
+	"bitbucket.org/redeam/integration-channel/swclient"
 	"github.com/brianvoe/gofakeit"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"

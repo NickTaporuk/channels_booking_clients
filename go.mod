@@ -3,15 +3,18 @@ module github.com/NickTaporuk/channels_booking_clients
 go 1.12
 
 require (
-	bitbucket.org/redeam/integration-booking v1.2.1
+	bitbucket.org/redeam/integration-booking v1.2.3
 	bitbucket.org/redeam/integration-channel v1.0.0
+	bitbucket.org/redeam/integration-channel/v2 v2.3.3
 	github.com/brianvoe/gofakeit v3.18.0+incompatible
 	github.com/go-openapi/strfmt v0.19.3
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/google/uuid v1.1.1
+	github.com/jedib0t/go-pretty v4.3.0+incompatible
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect
+	github.com/mattn/go-runewidth v0.0.6 // indirect
 	github.com/pelletier/go-toml v1.4.0 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2

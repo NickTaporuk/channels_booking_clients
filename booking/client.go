@@ -3,7 +3,8 @@ package booking
 import (
 	"bitbucket.org/redeam/integration-booking/swclient"
 	"github.com/NickTaporuk/channels_booking_clients/logger"
-	"github.com/sirupsen/logrus"
+	"github.com/jedib0t/go-pretty/table"
+	"os"
 )
 
 const (
@@ -53,7 +54,17 @@ func (b *BookingClient) SetClient(client *swclient.APIClient) {
 }
 
 func (b *BookingClient) String() {
-	b.logger.Logger().WithFields(logrus.Fields{"booking ID": b.bookingID, "hold ID": b.holdID}).Info("booking client data")
+	t := table.NewWriter()
+	t.SetStyle(table.StyleLight)
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"#", "Entity Name", "UUID",})
+	t.AppendRows([]table.Row{
+		{1, "booking ID", b.bookingID},
+		{2, "hold ID", b.holdID},
+	})
+	t.Render()
+
+	//b.logger.Logger().WithFields(logrus.Fields{"booking ID": b.bookingID, "hold ID": b.holdID}).Info("booking client data")
 }
 
 // NewBookingClient
