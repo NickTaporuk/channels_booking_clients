@@ -84,10 +84,10 @@ func (ch ChannelsClient) String() {
 	t.SetOutputMirror(os.Stdout)
 	t.AppendHeader(table.Row{"#", "Entity Name", "UUID",})
 	t.AppendRows([]table.Row{
-		{1, "supplierID", ch.supplierID},
-		{2, "productID", ch.productID},
-		{3, "rateIDs", ch.rateIDs},
-		{4, "priceIDs", ch.priceIDs},
+		{1, "supplier ID", ch.supplierID},
+		{2, "product  ID", ch.productID},
+		{3, "rate     IDs", ch.rateIDs},
+		{4, "price    IDs", ch.priceIDs},
 	})
 	t.Render()
 

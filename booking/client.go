@@ -59,8 +59,8 @@ func (b *BookingClient) String() {
 	t.SetOutputMirror(os.Stdout)
 	t.AppendHeader(table.Row{"#", "Entity Name", "UUID",})
 	t.AppendRows([]table.Row{
-		{1, "booking ID", b.bookingID},
-		{2, "hold ID", b.holdID},
+		{1, "booking  ID", b.bookingID},
+		{2, "hold     ID", b.holdID},
 	})
 	t.Render()
 
